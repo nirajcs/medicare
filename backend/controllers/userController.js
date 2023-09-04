@@ -1,7 +1,10 @@
 import asyncHandler from 'express-async-handler'
 import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
 import User from '../models/userModel.js'
 import generateToken from '../utils/generateToken.js'
+
+dotenv.config()
 
 const sendOtpLink=(email,otp)=>{
     try {
@@ -11,8 +14,8 @@ const sendOtpLink=(email,otp)=>{
             secure:false,
             requireTLS:true,
             auth:{
-                user:"ncs7498@gmail.com",
-                pass:"ifxyslgqpfkhsmpe"
+                user:process.env.APP_EMAIL,
+                pass:process.env.APP_PASSWORD
             }
         })
         const mailOptions={
