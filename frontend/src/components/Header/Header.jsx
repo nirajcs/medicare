@@ -2,6 +2,7 @@ import {useEffect,useRef} from 'react'
 import logo from '../../assets/images/logo.png'
 import { NavLink,Link, useLocation } from 'react-router-dom'
 import { BiMenu } from 'react-icons/bi'
+import { useSelector } from 'react-redux'
 
 const navlinks = [
   {
@@ -9,7 +10,7 @@ const navlinks = [
     display:'Home'
   },
   {
-    path:'/doctors',
+    path:'/doctorlist',
     display:'Doctors'
   },
   {
@@ -20,8 +21,7 @@ const navlinks = [
 
 const Header = () => {
 
-  let location = useLocation()
-  let notLoggedIn = location.pathname==='/' || location.pathname.startsWith('/signup') || location.pathname.startsWith('/doctors') || location.pathname.startsWith('/admin')
+  const { userInfo } = useSelector((state)=>state.auth)
 
   const headerRef = useRef(null)
   const menuRef = useRef(null)
@@ -55,7 +55,7 @@ const Header = () => {
           </div>
 
           {
-            (notLoggedIn)? null : (
+            (userInfo)?(
               <>
                 <div className="navigation" ref={menuRef} onClick={toggleMenu}>
                   <ul className="menu flex items-center gap-[2.7rem]">
@@ -72,7 +72,7 @@ const Header = () => {
                   <BiMenu className='w-6 h-6 cursor-pointer'/>
                 </span>
               </>
-            )
+            ):null
           }
         </div>
       </div>
