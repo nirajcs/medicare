@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
@@ -19,6 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
+
+app.use(cors({
+    origin: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  }));
 
 app.use('/api',userRoutes)
 app.use('/api/doctors',doctorRoutes)

@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
 import User from '../models/userModel.js'
 import generateToken from '../utils/generateToken.js'
 
@@ -45,6 +46,23 @@ const userController = {
         }
         res.status(200).json(user)
     }),
+    //GOOGLE LOGIN
+    googleLogin : asyncHandler(async(req,res)=>{
+        let token = req.body.credentialResponse.credential
+        let decoded = jwt.decode(token)
+        const { email } = decoded
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            generateToken(res, userExists._id);
+                res.status(201).json({
+                _id: userExists._id,
+                name: userExists.name,
+                email: userExists.email,
+            });
+        }else{
+            res.status(400).json({error:"No User Found"})
+        }
+    }),
     authUser : asyncHandler(async(req,res)=>{
         const { email, password } = req.body;
 
@@ -61,6 +79,31 @@ const userController = {
         } else {
           res.status(401);
           throw new Error('Invalid email or password');
+        }
+    }),
+    //GOOGLE SIGN UP
+    oauth:asyncHandler(async(req,res)=>{
+        let token = req.body.credentialResponse.credential
+        let decoded = jwt.decode(token)
+        const { name, email, sub } = decoded
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            res.status(400).json({error:'User already exists'});
+        }
+
+        const user = await User.create({
+            name,
+            email,
+            sub
+        });
+
+        if(user){
+            generateToken(res, user._id);
+                res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+            });
         }
     }),
 

@@ -20,4 +20,7 @@ export const adminsApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useLoginMutation,useLogoutMutation } = adminsApiSlice;
+export const { 
+    useLoginMutation,
+    useLogoutMutation
+ } = adminsApiSlice;

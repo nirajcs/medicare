@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Admin from "../models/adminModel.js";
+import User from '../models/userModel.js'
 import generateToken from "../utils/adminGenerateToken.js";
 
 const adminController = {
@@ -15,6 +16,14 @@ const adminController = {
         }else{
             res.status(400)
             throw new Error('Invalid mail or password')
+        }
+    }),
+    getUsers : asyncHandler(async(req,res)=>{
+        let users = await User.find({},{name:1,email:1,blood:1})
+        if(users){
+            res.status(200).json({userData:users})
+        }else{
+            res.status(400).json("Error in fetching")
         }
     }),
     logoutAdmin : asyncHandler(async(req,res)=>{

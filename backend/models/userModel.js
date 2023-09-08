@@ -14,10 +14,16 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+    },
+    sub:{
+      type:String,
     },
     otp:{
       type:Number
+    },
+    blood:{
+      type:String,
+      default:"N/A"
     }
   },
   {
