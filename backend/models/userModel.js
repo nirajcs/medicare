@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema(
     blood:{
       type:String,
       default:"N/A"
+    },
+    blocked:{
+      type:Boolean,
+      default:false
     }
   },
   {
