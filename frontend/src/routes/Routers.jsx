@@ -10,6 +10,7 @@ import DoctorLogin from '../pages/Doctors/DoctorLogin'
 import DoctorRegister from '../pages/Doctors/DoctorRegister'
 import Doctors from '../pages/Doctors/Doctors'
 import MyAppointments from '../pages/Doctors/MyAppointments'
+import DoctorTimeManagement from '../pages/Doctors/DoctorTimeManagement'
 import DoctorProfile from '../pages/Doctors/DoctorProfile'
 
 import AdminLogin from '../pages/Admin/AdminLogin'
@@ -42,6 +43,7 @@ const Routers = () => {
         <Route path='' element={<DoctorsPrivateRoute/>}>
           <Route path='/doctors/home' element={<Doctors/>}/>
           <Route path='/doctors/appointments' element={<MyAppointments/>}/>
+          <Route path='/doctors/managetime' element={<DoctorTimeManagement/>}/>
           <Route path='/doctors/profile' element={<DoctorProfile/>}/>          
         </Route>
 

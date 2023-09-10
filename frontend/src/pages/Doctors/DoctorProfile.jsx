@@ -2,7 +2,9 @@ import React from 'react'
 
 const DoctorProfile = () => {
   return (
-    <div className='text-xl'>DoctorProfile</div>
+    <section className='container'>
+      <h2 className='font-bold text-primaryColor'>MY PROFILE</h2>
+    </section>
   )
 }
 

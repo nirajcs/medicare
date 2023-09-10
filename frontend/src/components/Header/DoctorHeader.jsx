@@ -17,6 +17,10 @@ const navlinks = [
   {
     path:'/doctors/appointments',
     display:'Appointments'
+  },
+  {
+    path:'/doctors/managetime',
+    display:'Time Management'
   }
 ]
 
