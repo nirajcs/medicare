@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -16,14 +17,15 @@ connectDB();
 
 const app = express();
 
+app.use(express.static('backend/public'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
 app.use(cors({
-    origin: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: 'http://localhost:3000',
     credentials: true
   }));
 
@@ -31,9 +33,18 @@ app.use('/api',userRoutes)
 app.use('/api/doctors',doctorRoutes)
 app.use('/api/admin',adminRoutes)
 
-app.get('/api',(req,res)=>{
-    res.send("Server is ready")
-})
+if (process.env.NODE_ENV === 'production') {
+    const __dirname = path.resolve();
+    app.use(express.static(path.join(__dirname, '/frontend/dist')));
+  
+    app.get('*', (req, res) =>
+      res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+    );
+  } else {
+    app.get('/', (req, res) => {
+      res.send('API is running....');
+    });
+  }
 
 app.use(notFound)
 app.use(errorHandler)

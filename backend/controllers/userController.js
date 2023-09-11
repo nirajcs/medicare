@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel.js'
+import Doctor from '../models/doctorModel.js'
 import generateToken from '../utils/generateToken.js'
 
 dotenv.config()
@@ -131,8 +132,6 @@ const userController = {
 
     otpVerify : asyncHandler(async(req,res)=>{
         const { email,otp } = req.body
-        console.log("got here")
-        console.log(req.body)
 
         const userExists = await User.findOne({email})
 
@@ -149,7 +148,14 @@ const userController = {
             }
         }
     }),
-
+    getDoctors : asyncHandler(async(req,res)=>{
+        let doctors = await Doctor.find({},{password:0})
+        if(doctors){
+            res.status(200).json({doctorsData:doctors})
+        }else{
+            res.status(400).json({error:"Error in Fetching Doctors Data"})
+        }
+    }),
     logoutUser : asyncHandler(async(req,res)=>{
         res.cookie('jwt', '', {
             httpOnly: true,

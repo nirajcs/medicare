@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html","./src/**/*.{html,jsx,}","./node_modules/react-tailwindcss-datepicker/dist/index.esm.js"],
+  content: ["./index.html","./src/**/*.{html,jsx,}"],
   theme: {
     extend: {
       colors: {
