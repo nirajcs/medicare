@@ -53,7 +53,7 @@ const userController = {
         let decoded = jwt.decode(token)
         const { email } = decoded
         const userExists = await User.findOne({ email });
-        if (userExists) {
+        if (userExists && !userExists.blocked) {
             generateToken(res, userExists._id);
                 res.status(201).json({
                 _id: userExists._id,
@@ -69,7 +69,7 @@ const userController = {
 
         const user = await User.findOne({ email });
       
-        if (user && (await user.matchPassword(password))) {
+        if (user && (await user.matchPassword(password)) && !user.blocked) {
           generateToken(res, user._id);
       
           res.json({
@@ -79,7 +79,7 @@ const userController = {
           });
         } else {
           res.status(401);
-          throw new Error('Invalid email or password');
+          throw new Error('Either the email or password is incorrect, or the account has been blocked by the admin.');
         }
     }),
     //GOOGLE SIGN UP

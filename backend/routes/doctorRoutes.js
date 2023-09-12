@@ -29,6 +29,9 @@ const storage = multer.diskStorage({
 
 router.post('/register',upload.single('file'),doctorController.register)
 router.post('/auth',doctorController.authDoctor)
+router.post('/managetime',doctorController.manageTime)
+router.get('/delete-timing/:docId/:id',doctorController.deleteTimings) 
+router.get('/get-timings/:id',doctorController.getTimings)
 router.post('/logout',doctorController.logoutDoctor)
 
 export default router 

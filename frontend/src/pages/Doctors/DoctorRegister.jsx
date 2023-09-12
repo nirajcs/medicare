@@ -31,29 +31,34 @@ const DoctorRegister = () => {
 
   const submitHandler = async(e)=>{
     e.preventDefault();
-    if(password !== confirmpass){
-        toast.error('Passwords do not match!!')
-    }else{
-      console.log("HI here")
-      try {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('specialization', specialization);
-        formData.append('qualification', qualification);
-        formData.append('experience', experience);
-        formData.append('address', address);
-        formData.append('password', password);
-        formData.append('file', image);
-
-        const res = await register(formData).unwrap();
-        console.log(res)
-
-        dispatch(setCredentials(res));
-        toast.success("Registered successfully");
-      } catch (err) {
-        toast.error(err?.data?.message || err.error)
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+    if(passwordRegex.test(password)){
+      if(password !== confirmpass){
+          toast.error('Passwords do not match!!')
+      }else{
+        console.log("HI here")
+        try {
+          const formData = new FormData();
+          formData.append('name', name);
+          formData.append('email', email);
+          formData.append('specialization', specialization);
+          formData.append('qualification', qualification);
+          formData.append('experience', experience);
+          formData.append('address', address);
+          formData.append('password', password);
+          formData.append('file', image);
+  
+          const res = await register(formData).unwrap();
+          console.log(res)
+  
+          dispatch(setCredentials(res));
+          toast.success("Registered successfully");
+        } catch (err) {
+          toast.error(err?.data?.message || err.error)
+        }
       }
+    }else{
+      toast.error('Password must contain 5 characters with at least one letter, one number, and one special character.')
     }
   }
 

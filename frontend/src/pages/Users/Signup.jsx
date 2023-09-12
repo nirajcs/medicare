@@ -13,6 +13,7 @@ const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmpass, setConfirmPass] = useState('')
+  
 
   const [register,{isLoading}] = useRegisterMutation();
   const [googleAuth,{authLoading}] = useGoogleAuthMutation();
@@ -40,15 +41,20 @@ const Signup = () => {
 
   const submitHandler = async(e)=>{
     e.preventDefault(); 
-    if(password !== confirmpass){
-        toast.error('Passwords do not match!!')
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+    if(passwordRegex.test(password)){
+      if(password !== confirmpass){
+          toast.error('Passwords do not match!!')
+      }else{
+          try {
+              const res = await register({ name,email,password }).unwrap();
+              navigate('/otp',{ state: { email:res.email } });
+          } catch (err) {
+              toast.error(err?.data?.message || err.error);
+          }
+      }
     }else{
-        try {
-            const res = await register({ name,email,password }).unwrap();
-            navigate('/otp',{ state: { email:res.email } });
-        } catch (err) {
-            toast.error(err?.data?.message || err.error);
-        }
+      toast.error('Password must contain 5 characters with at least one letter, one number, and one special character.')
     }
   }
 

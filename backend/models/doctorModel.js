@@ -39,7 +39,20 @@ const doctorSchema = mongoose.Schema(
     experience:{
         type:String,
         required:true
-    }
+    },
+    available: [
+      {
+        date: {
+          type: String, // You can use Date for the date field
+        },
+        fromTime: {
+          type: String, // You can use String for the time fields
+        },
+        toTime: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

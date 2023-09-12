@@ -31,7 +31,7 @@ const Login = () => {
       dispatch(setCredentials({...res}));
       navigate('/home');
     } catch (error) {
-      toast.error("User Not Found");
+      toast.error("This user is either invalid or blocked by admin.");
     }
   }
   

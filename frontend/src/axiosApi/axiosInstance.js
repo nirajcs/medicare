@@ -8,6 +8,8 @@ import axios from 'axios'
     baseURL: 'http://localhost:5000/api/admin',
   });
 
-
+  export const doctorApi = axios.create({
+    baseURL: 'http://localhost:5000/api/doctors',
+  });
 
   
