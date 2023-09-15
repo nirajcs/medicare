@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useRegisterMutation } from '../../slices/doctorSlices/doctorsApiSlice'
 import { setCredentials } from '../../slices/doctorSlices/doctorAuthSlice'
-import { doctorApi } from '../../axiosApi/axiosInstance'
 
 const DoctorRegister = () => {
   const dispatch = useDispatch();
@@ -33,34 +32,38 @@ const DoctorRegister = () => {
 
   const submitHandler = async(e)=>{
     e.preventDefault();
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
-    if(passwordRegex.test(password)){
-      if(password !== confirmpass){
-          toast.error('Passwords do not match!!')
-      }else{
-        try {
-          const formData = new FormData();
-          formData.append('name', name);
-          formData.append('email', email);
-          formData.append('specialization', specialization);
-          formData.append('qualification', qualification);
-          formData.append('experience', experience);
-          formData.append('address', address);
-          formData.append('password', password);
-          formData.append('file', image);
-          formData.append('resume',resume);
-          
-          const res = await register(formData).unwrap();
-          console.log(res)
-  
-          dispatch(setCredentials(res));
-          toast.success("Registered successfully");
-        } catch (err) {
-          toast.error(err?.data?.message || err.error)
+    if(name && email && specialization && qualification && experience && address && password && confirmpass && image && resume){
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+      if(passwordRegex.test(password)){
+        if(password !== confirmpass){
+            toast.error('Passwords do not match!!')
+        }else{
+          try {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('specialization', specialization);
+            formData.append('qualification', qualification);
+            formData.append('experience', experience);
+            formData.append('address', address);
+            formData.append('password', password);
+            formData.append('file', image);
+            formData.append('resume',resume);
+            
+            const res = await register(formData).unwrap();
+            console.log(res)
+    
+            dispatch(setCredentials(res));
+            toast.success("Registered successfully");
+          } catch (err) {
+            toast.error(err?.data?.message || err.error)
+          }
         }
+      }else{
+        toast.error('Password must contain 5 characters with at least one letter, one number, and one special character.')
       }
     }else{
-      toast.error('Password must contain 5 characters with at least one letter, one number, and one special character.')
+      toast.error("All fields are required")
     }
   }
 
@@ -124,8 +127,8 @@ const DoctorRegister = () => {
                 <div className="mb-3">
                   <label
                     htmlFor="uploadResume"
-                    className="mb-2 inline-block text-blue-500 dark:text-blue-200"
-                    >Upload your Resume
+                    className="mb-2 inline-block text-blue-500 dark:text-blue-200">
+                      Upload your Resume
                   </label>
                   <input
                     className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-blue-300 bg-clip-padding px-3 py-[0.32rem] text-xs font-normal text-blue-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-blue-100 file:px-3 file:py-[0.32rem] file:text-blue-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-blue-200 focus:border-primary focus:text-blue-700 focus:shadow-te-primary focus:outline-none dark:border-blue-600 dark:text-blue-200 dark:file:bg-blue-700 dark:file:text-blue-100 dark:focus:border-primary"
@@ -133,6 +136,7 @@ const DoctorRegister = () => {
                     accept="application/pdf"
                     onChange={(e) => setResume(e.target.files[0])}
                     type="file" />
+                    <p className='text-blue-500 text-xs font-bold mt-1'>Only pdf files are accepted**</p>
                 </div>
             </div>
             <div className='px-2'>

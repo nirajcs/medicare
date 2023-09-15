@@ -51,6 +51,9 @@ const AdminDoctors = () => {
                           Experience
                       </th>
                       <th scope="col" className="px-6 py-3">
+                          Resume
+                      </th>
+                      <th scope="col" className="px-6 py-3">
                           Options
                       </th>
                   </tr>
@@ -58,7 +61,7 @@ const AdminDoctors = () => {
               <tbody className='border-2'>
                 {(doctors.length>0)?(
                   doctors.map((doctor, index) => (
-                    <tr className="bg-white border-b  hover:bg-gray-200 " key={index}>
+                    <tr className="bg-white border-b  hover:bg-gray-100 " key={index}>
                       <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {index + 1}
                       </th>
@@ -80,9 +83,12 @@ const AdminDoctors = () => {
                       <td className="px-6 py-4">
                         {doctor.experience}
                       </td>
+                      <td className="px-6 py-4">
+                        <a className='flex justify-center hover:text-blue-700 hover:font-medium' target='_blank' href={`http://localhost:5000/resumes/${doctor.resume}`}>view</a>
+                      </td>
                       {
                         (!doctor.approved)?(
-                          <td className="px-6 py-4">
+                          <td className="px-6 text-center py-4">
                             <button onClick={()=>{handleApprove(doctor._id)}} className="bg-green-100 hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded">
                               approve
                             </button>
