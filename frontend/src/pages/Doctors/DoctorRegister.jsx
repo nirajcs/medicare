@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useRegisterMutation } from '../../slices/doctorSlices/doctorsApiSlice'
 import { setCredentials } from '../../slices/doctorSlices/doctorAuthSlice'
+import { doctorApi } from '../../axiosApi/axiosInstance'
 
 const DoctorRegister = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const DoctorRegister = () => {
   const [specialization, setSpecialization] = useState('')
   const [address, setAddress] = useState('')
   const [image, setImage] = useState('')
+  const [resume,setResume] = useState('')
   const [qualification, setQualification] = useState('')
   const [experience, setExperience] = useState('')
   const [password, setPassword] = useState('')
@@ -36,7 +38,6 @@ const DoctorRegister = () => {
       if(password !== confirmpass){
           toast.error('Passwords do not match!!')
       }else{
-        console.log("HI here")
         try {
           const formData = new FormData();
           formData.append('name', name);
@@ -47,7 +48,8 @@ const DoctorRegister = () => {
           formData.append('address', address);
           formData.append('password', password);
           formData.append('file', image);
-  
+          formData.append('resume',resume);
+          
           const res = await register(formData).unwrap();
           console.log(res)
   
@@ -71,16 +73,42 @@ const DoctorRegister = () => {
       </div>
  
       <div className='faded-blue-div m-3 md:flex-col w-full max-w-[1000px] mx-auto rounded-lg shadow-md p-5'>
-        <form onSubmit={submitHandler} className="md:flex md:justify-between md:mx-[60px] items-center">
+        <form onSubmit={submitHandler} encType="multipart/form-data" className="md:flex md:justify-between md:mx-[60px] items-center">
             <div className='px-2'>
-                <div className="my-[10px]">
-                  <label className="block font-medium text-blue-500 text-sm" htmlFor="small_size">Upload your Photo</label>
-                  <input  type="file" onChange={(e)=>setImage(e.target.files[0])} className="p-0.5 text-xs text-900 cursor-pointer" id="small_size"/>
+            <div className="flex">
+                <div className="mb-2 me-2 w-1/2">
+                  <label
+                    htmlFor="uploadPhoto"
+                    className="inline-block text-sm font-medium text-blue-500 dark:text-blue-200"
+                    >Upload your Photo
+                  </label>
+                  <input
+                    className="relative py-1 m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-blue-300 bg-clip-padding px-3 py-[0.32rem] text-xs font-normal text-blue-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-blue-100 file:px-3 file:py-[0.32rem] file:text-blue-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-blue-200 focus:border-primary focus:text-blue-700 focus:shadow-te-primary focus:outline-none dark:border-blue-600 dark:text-blue-200 dark:file:bg-blue-700 dark:file:text-blue-100 dark:focus:border-primary"
+                    id="uploadPhoto"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    type="file" />
                 </div>
-                <div className="my-[10px]">
-                  <label className='text-blue-500 text-sm font-medium' htmlFor="name">Name</label>
-                  <input type="text" name="name" value={name} onChange={(e)=>setName(e.target.value)} id='name' placeholder="Enter Your Name" className="block px-2 py-1 w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
+                <div className="mb-2 ms-2 w-1/2">
+                  <label
+                    className="text-blue-500 text-sm font-medium"
+                    htmlFor="name"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    id="name"
+                    placeholder="Enter Your Name"
+                    className="block px-2 py-1 w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"
+                  />
                 </div>
+              </div>
+
+
                 <div className="my-[10px]">
                   <label className='text-blue-500 text-sm font-medium' htmlFor="email">Email</label>
                   <input type="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)} id='email' placeholder="Enter Your Email" className="block px-2 py-1 w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
@@ -92,6 +120,19 @@ const DoctorRegister = () => {
                 <div className="my-[10px]">
                   <label className='text-blue-500 text-sm font-medium' htmlFor="address">Address</label>
                   <textarea name="address" id='address' value={address} onChange={(e)=>setAddress(e.target.value)} cols="50" rows="4" placeholder='Enter Your Address' className="block px-2 py-1 w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"></textarea>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="uploadResume"
+                    className="mb-2 inline-block text-blue-500 dark:text-blue-200"
+                    >Upload your Resume
+                  </label>
+                  <input
+                    className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-blue-300 bg-clip-padding px-3 py-[0.32rem] text-xs font-normal text-blue-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-blue-100 file:px-3 file:py-[0.32rem] file:text-blue-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-blue-200 focus:border-primary focus:text-blue-700 focus:shadow-te-primary focus:outline-none dark:border-blue-600 dark:text-blue-200 dark:file:bg-blue-700 dark:file:text-blue-100 dark:focus:border-primary"
+                    id="uploadResume"
+                    accept="application/pdf"
+                    onChange={(e) => setResume(e.target.files[0])}
+                    type="file" />
                 </div>
             </div>
             <div className='px-2'>

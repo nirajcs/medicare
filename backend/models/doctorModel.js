@@ -32,6 +32,10 @@ const doctorSchema = mongoose.Schema(
       type:String,
       default:''  
     },
+    resume:{
+      type:String,
+      default:''  
+    },
     qualification:{
         type:String,
         required:true

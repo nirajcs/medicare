@@ -6,28 +6,21 @@ import doctorController from '../controllers/doctorControllers.js';
 const router = express.Router();
 
 const storage = multer.diskStorage({
-    destination:(req,file,cb) => {
-      cb(null, 'backend/public/images/doctors')
-    },
-    filename:(req,file,cb) => {
-      cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+  destination: (req, file, cb) => {
+    if (file.fieldname === 'file') {
+      cb(null, 'backend/public/images/doctors');
+    } else if (file.fieldname === 'resume') {
+      cb(null, 'backend/public/resumes');
     }
-  })
-  const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only images are allowed!"), false); 
-    }
-  };
-  
-  const upload = multer({ 
-    storage: storage,
-    fileFilter: fileFilter, 
-  });
-  
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
 
-router.post('/register',upload.single('file'),doctorController.register)
+const upload = multer({ storage });
+  
+router.post('/register',upload.fields([{ name: 'file' }, { name: 'resume' }]),doctorController.register)
 router.post('/auth',doctorController.authDoctor)
 router.post('/managetime',doctorController.manageTime)
 router.get('/delete-timing/:docId/:id',doctorController.deleteTimings) 

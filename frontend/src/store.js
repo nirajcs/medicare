@@ -3,7 +3,6 @@ import authReducer from './slices/authSlice';
 import { apiSlice } from './slices/apiSlice';
 import docReducer from './slices/doctorSlices/doctorAuthSlice'
 import adminAuthSlice from './slices/adminSlices/adminAuthSlice'
-// import adminReducer from './slices/adminSlices/adminAuthSlice'
 
 const store = configureStore({
     reducer:{

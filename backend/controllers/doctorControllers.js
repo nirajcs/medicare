@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Doctor from "../models/doctorModel.js";
-import generateToken from '../utils/doctorGenerateToken.js'; 
-import jwt from 'jsonwebtoken';
+import generateToken from '../utils/doctorGenerateToken.js';
 
 const doctorController = {
     authDoctor:asyncHandler(async(req,res)=>{
@@ -21,6 +20,8 @@ const doctorController = {
     }),
     register:asyncHandler(async(req,res)=>{
         const{name,email,specialization,address,image,experience,qualification,password} = req.body
+        const imagePath = req.files['file'][0].filename;
+        const resumePath = req.files['resume'][0].filename;
 
         const doctorExists = await Doctor.findOne({email})
 
@@ -35,7 +36,8 @@ const doctorController = {
             specialization,
             address,
             password,
-            imagePath:req.file.filename,
+            imagePath:imagePath,
+            resume:resumePath,
             qualification,
             experience
         })

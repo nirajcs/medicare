@@ -27,7 +27,7 @@
   }
 
   .faded-blue-div{
-    background-color: rgba(96, 244, 255, 0.24);
+    background-color: rgba(96, 244, 255, 0.20);
   }
 
   @media only screen and (max-width:1024px){
