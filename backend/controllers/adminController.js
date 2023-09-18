@@ -62,6 +62,20 @@ const adminController = {
         }
 
     }),
+    blockDoctor : asyncHandler(async(req,res)=>{
+        let docId = req.params.id
+        let doctor = await Doctor.findById(docId)
+
+        doctor.blocked = !doctor.blocked;
+        await doctor.save();
+
+        if(doctor){
+            res.status(200).json(doctor)
+        }else{
+            res.status(400).json({error:"Id invalid"})
+        }
+
+    }),
     logoutAdmin : asyncHandler(async(req,res)=>{
         res.cookie('admnjwt', '', {
             httpOnly: true,

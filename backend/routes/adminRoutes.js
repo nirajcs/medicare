@@ -7,6 +7,7 @@ router.post('/auth',adminController.auth);
 router.get('/userdata',adminController.getUsers);
 router.put('/block-user/:id',adminController.blockUsers);
 router.put('/approve/:id',adminController.approveDoctors);
+router.put('/block-doctor/:id',adminController.blockDoctor);
 router.get('/doctordata',adminController.getDoctors);
 router.post('/logout',adminController.logoutAdmin);
 

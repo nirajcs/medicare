@@ -12,6 +12,10 @@ const userSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    mobile:{
+      type:Number,
+      default:null
+    },
     password: {
       type: String,
     },
@@ -21,9 +25,27 @@ const userSchema = mongoose.Schema(
     otp:{
       type:Number
     },
+    gender:{
+      type:String,
+      default:null
+    },
+    emergency:{
+      name:{
+        type:String,
+        default:null
+      },
+      contact:{
+        type:Number,
+        default:null
+      }
+    },
     blood:{
       type:String,
-      default:"N/A"
+      default:null
+    },
+    age:{
+      type:Number,
+      default:null
     },
     blocked:{
       type:Boolean,

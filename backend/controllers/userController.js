@@ -148,6 +148,40 @@ const userController = {
             }
         }
     }),
+    getUserDetails : asyncHandler(async(req,res)=>{
+        let id = req.params.id
+        let user = await User.findById(id,{password:0,otp:0})
+        if(user){
+            res.status(200).json(user);
+        }else{
+            res.status(400);
+            throw new Error('User not Found');
+        }
+    }),
+    updateUser : asyncHandler(async(req,res)=>{
+        const {id,name,email,mobile,blood,age,gender,emerPerson,emerNumber,password} = req.body
+        let user = await User.findById(id);
+
+        user.name = name?name:user.name;
+        user.email = email?email:user.email
+        user.mobile = mobile?mobile:user.mobile
+        user.blood = blood?blood:user.blood
+        user.password = password?password:user.password
+        user.age = age?age:user.age
+        user.gender = gender?gender:user.gender
+        user.emergency.name = emerPerson?emerPerson:user.emergency.name
+        user.emergency.contact = emerNumber?emerNumber:user.emergency.contact
+
+        let updateUser = await user.save()
+
+        if(updateUser){
+            res.status(200).json(updateUser)
+        }else{
+            res.status(400);
+            throw new Error('Error in updating user details.');
+        }
+        
+    }),
     getDoctors : asyncHandler(async(req,res)=>{
         let doctors = await Doctor.find({},{password:0})
         if(doctors){

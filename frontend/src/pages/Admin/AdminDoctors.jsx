@@ -14,13 +14,22 @@ const AdminDoctors = () => {
     }
   }
 
+  const handleBlock = async(docId)=>{
+    let res = await adminApi.put(`/block-doctor/${docId}`)
+    if(res){
+      toast.success("Updated Successfully")
+    }else{
+      toast.error("Failed to Update")
+    }
+  }
+
   useEffect(() => {
     const fetchDoctorsData = async()=>{
       let res = await adminApi.get('/doctordata')
       setDoctors(res.data.doctorsData)
     }
     fetchDoctorsData();
-  }, [handleApprove])
+  }, [handleApprove,handleBlock])
 
   
   return (
@@ -94,11 +103,19 @@ const AdminDoctors = () => {
                             </button>
                           </td>
                         ):(
-                          <td className="px-6 py-4">
-                            <button onClick={()=>{handleApprove(doctor._id)}} className="bg-red-100 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
-                              disapprove
-                            </button>
-                          </td>
+                          (doctor.blocked)?(
+                            <td className="px-6 py-4">
+                              <button onClick={()=>{handleBlock(doctor._id)}} className="bg-yellow-100 hover:bg-yellow-500 text-yellow-700 font-semibold hover:text-white py-2 px-4 border border-yellow-500 hover:border-transparent rounded">
+                                Unblock
+                              </button>
+                            </td>
+                          ):(
+                            <td className="px-6 py-4">
+                              <button onClick={()=>{handleBlock(doctor._id)}} className="bg-red-100 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
+                                Block
+                              </button>
+                            </td>
+                          )
                         )
                       }
                     </tr>

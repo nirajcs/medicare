@@ -14,7 +14,7 @@ const DoctorList = () => {
     fetchDoctors();
   },[])
 
-  const filteredDoctors = doctors.filter((doctor)=>doctor.approved===true && 
+  const filteredDoctors = doctors.filter((doctor)=>doctor.approved===true && doctor.blocked===false && 
   (doctor.name.toLowerCase().includes(search.toLowerCase()) ||
   doctor.specialization.toLowerCase().includes(search.toLowerCase())
   ))

@@ -19,7 +19,7 @@ const doctorController = {
         }
     }),
     register:asyncHandler(async(req,res)=>{
-        const{name,email,specialization,address,image,experience,qualification,password} = req.body
+        const{name,email,specialization,fees,address,image,experience,qualification,password} = req.body
         const imagePath = req.files['file'][0].filename;
         const resumePath = req.files['resume'][0].filename;
 
@@ -36,6 +36,7 @@ const doctorController = {
             specialization,
             address,
             password,
+            fees,
             imagePath:imagePath,
             resume:resumePath,
             qualification,
@@ -49,7 +50,16 @@ const doctorController = {
             name:doctor.name,
             email:doctor.email,
         })
-
+    }),
+    getDoctor : asyncHandler(async(req,res)=>{
+        let {id} = req.params
+        let doctor = await Doctor.findOne({_id:id},{password:0})
+        if(doctor){
+            res.status(200).json(doctor)
+        }else{
+            res.status(400)
+            throw new Error("Unable to find Doctor")
+        }
     }),
     manageTime : asyncHandler(async(req,res)=>{
         const {docId,date,from,to} = req.body

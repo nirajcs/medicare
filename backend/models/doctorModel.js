@@ -28,6 +28,10 @@ const doctorSchema = mongoose.Schema(
         type:Boolean,
         default:false
     },
+    blocked:{
+      type:Boolean,
+      default:false
+    },
     imagePath:{
       type:String,
       default:''  
@@ -35,6 +39,10 @@ const doctorSchema = mongoose.Schema(
     resume:{
       type:String,
       default:''  
+    },
+    fees:{
+      type:Number,
+      default:0
     },
     qualification:{
         type:String,

@@ -38,6 +38,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body:data
             })
         }),
+        updateuser:builder.mutation({
+            query:(data)=>({
+                url:`${USERS_URL}/update-user`,
+                method:'POST',
+                body:data
+            })
+        }),
         logout:builder.mutation({
             query:()=>({
                 url:`${USERS_URL}/logout`,
@@ -53,5 +60,6 @@ export const {
     useVerifyMutation,
     useGoogleAuthMutation,
     useGoogleLoginMutation,
+    useUpdateuserMutation,
     useLogoutMutation
  } = usersApiSlice;

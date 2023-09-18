@@ -22,6 +22,7 @@ const upload = multer({ storage });
   
 router.post('/register',upload.fields([{ name: 'file' }, { name: 'resume' }]),doctorController.register)
 router.post('/auth',doctorController.authDoctor)
+router.get('/getdoctor/:id',doctorController.getDoctor)
 router.post('/managetime',doctorController.manageTime)
 router.get('/delete-timing/:docId/:id',doctorController.deleteTimings) 
 router.get('/get-timings/:id',doctorController.getTimings)
