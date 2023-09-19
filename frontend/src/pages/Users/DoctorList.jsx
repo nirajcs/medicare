@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DoctorCard from '../../components/DoctorCard'
 import { usersApi } from '../../axiosApi/axiosInstance'
+import { Link } from 'react-router-dom'
 
 const DoctorList = () => {
   const [doctors, setDoctors] = useState([])
@@ -37,7 +38,9 @@ const DoctorList = () => {
         {
           (filteredDoctors.length !== 0)?(
             filteredDoctors.map((doctor,index)=>(
-              <DoctorCard key={index} details={doctor}/>
+              <Link to='/doctor-details' key={index} state={doctor._id}>
+                <DoctorCard className='cursor:pointer' details={doctor}/>
+              </Link>
             ))
           ):(
             <div className='flex text-center w-full'>
