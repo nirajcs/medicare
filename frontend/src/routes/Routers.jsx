@@ -5,6 +5,7 @@ import Signup from '../pages/Users/Signup'
 import EmailVerify from '../pages/Users/EmailVerify'
 import Profile from '../pages/Users/Profile'
 import DoctorList from '../pages/Users/DoctorList'
+import DoctorDetails from '../pages/Users/DoctorDetails'
 
 import DoctorLogin from '../pages/Doctors/DoctorLogin'
 import DoctorRegister from '../pages/Doctors/DoctorRegister'
@@ -35,6 +36,7 @@ const Routers = () => {
           <Route path='/home' element={<Home/>}/>
           <Route path='/profile' element={<Profile/>}/>
           <Route path='/doctorlist' element={<DoctorList/>}/>
+          <Route path='/doctor-details' element={<DoctorDetails/>}/>
         </Route>
         
 
