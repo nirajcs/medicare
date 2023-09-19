@@ -19,11 +19,14 @@ const DoctorTimeManagement = () => {
         let newBody = {docId,date,from,to}
         let fromTime = new Date(`${date}T${from}:00Z`)
         let toTime = new Date(`${date}T${to}:00Z`)
-        if (timings.every(obj => new Date(obj.date).getTime() !== new Date(date).getTime())) {
+        // if (timings.every(obj => new Date(obj.date).getTime() !== new Date(date).getTime())) {
             // If every date in timings array is not the same as the new date, you can add it
             if (new Date(date).getTime() > Date.now()) {
               if (fromTime < toTime) {
                 let res = await doctorApi.post('/managetime', newBody);
+                setDate('')
+                setFrom('')
+                setTo('')
                 if (res) {
                   toast.success("Time Added Successfully");
                 }
@@ -33,9 +36,9 @@ const DoctorTimeManagement = () => {
             } else {
               toast.error('Please add a future date');
             }
-          } else {
-            toast.error('Date already added');
-          }
+        //   } else {
+        //     toast.error('Date already added');
+        //   }
           
     }
 
