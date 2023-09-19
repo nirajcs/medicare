@@ -1,4 +1,6 @@
 import asyncHandler from "express-async-handler";
+import path from 'path'
+import fs from 'fs'
 import Doctor from "../models/doctorModel.js";
 import generateToken from '../utils/doctorGenerateToken.js';
 
@@ -50,6 +52,43 @@ const doctorController = {
             name:doctor.name,
             email:doctor.email,
         })
+    }),
+    updateDoctor:asyncHandler(async(req,res)=>{
+        const{id,name,email,specialization,fees,address,experience,qualification,password} = req.body
+
+        const doctor = await Doctor.findById(id);
+        doctor.name = name
+        doctor.email = email
+        doctor.specialization = specialization
+        doctor.address = address
+        doctor.fees = fees
+        doctor.qualification = qualification
+        doctor.experience = experience
+
+        if(password){
+            doctor.password = password
+        }
+
+        if (req.files && req.files['file'] && req.files['file'][0] && req.files['file'][0].filename) {
+            const imagePath = path.join('backend/public/images/doctors', doctor.imagePath);
+            fs.unlinkSync(imagePath);
+            doctor.imagePath = req.files['file'][0].filename;
+        }
+        
+        if (req.files && req.files['resume'] && req.files['resume'][0] && req.files['resume'][0].filename) {
+            const resumePath = path.join('backend/public/resumes', doctor.resume);
+            fs.unlinkSync(resumePath);
+            doctor.resume = req.files['resume'][0].filename;
+        }
+
+        let updateDoctor = await doctor.save();
+
+        if(updateDoctor){
+            res.status(200).json(updateDoctor)
+        }else{
+            res.status(400);
+            throw new Error('Error in updating doctor details.');
+        }
     }),
     getDoctor : asyncHandler(async(req,res)=>{
         let {id} = req.params

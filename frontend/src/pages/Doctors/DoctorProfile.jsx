@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { doctorApi } from '../../axiosApi/axiosInstance'
+import { toast } from 'react-toastify'
 
 const DoctorProfile = () => {
   const {doctorInfo} = useSelector((state)=>state.docAuth)
+
+  const [submittingForm, setSubmittingForm] = useState(false);
 
   const [name,setName] = useState('');
   const [email,setEmail] = useState('');
@@ -18,6 +21,44 @@ const DoctorProfile = () => {
   const [experience,setExperience] = useState('');
   const [fees,setFees] = useState('');
 
+  const submitHandler = async(e)=>{
+    try {
+      e.preventDefault()
+      if(!name || !email || !specialization || !address || !qualification || !experience || !fees){
+        toast.error("Name,Email,Specialization,Address,Qualification,Experience,Fees cannot be Empty!!")
+        return
+      }
+      if(password !== confirmPassword){
+        toast.error("Passwords are not matching")
+        return;
+      }
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+      if (password && !passwordRegex.test(password)) {
+        toast.error("Password must meet the criteria specified by the regex.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("id", doctorInfo._id);
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("specialization", specialization);
+      formData.append("qualification", qualification);
+      formData.append("experience", experience);
+      formData.append("address", address);
+      formData.append("fees", fees);
+      formData.append("password", password);
+      formData.append("file", image);
+      formData.append("resume", resume);
+
+      const res = await doctorApi.post('/updatedoctor',formData)
+      console.log(res);
+      setSubmittingForm(true)
+      toast.success('Updated Successfully')
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  }
+
   useEffect(()=>{
     const fetchDetails = async()=>{
       let res = await doctorApi.get(`/getdoctor/${doctorInfo._id}`)
@@ -27,23 +68,24 @@ const DoctorProfile = () => {
       setSpecialization(res.data.specialization)
       setAddress(res.data.address)
       setOldImage(res.data.imagePath)
-      setResume(res.data.resume)
       setQualification(res.data.qualification)
       setExperience(res.data.experience)
       setFees(res.data.fees)
     }
     fetchDetails();
-  },[])
+    setSubmittingForm(false);
+  },[submittingForm])
   return (
     <section className="p-4 px-5 lg:px-0">
       <div className="faded-blue-div text-center md:text-left w-full max-w-[1000px] mx-auto rounded-lg shadow-md p-5">
         <h3 className="text-headingColor text-[22px] leading-9 font-bold">
-          Doctor <span className="text-primaryColor">Registration</span>
+          Doctor <span className="text-primaryColor">Profile</span>
         </h3>
       </div>
 
       <div className="faded-blue-div m-3 md:flex-col w-full max-w-[1000px] mx-auto rounded-lg shadow-md p-5">
         <form
+          onSubmit={submitHandler}
           encType="multipart/form-data"
           className="md:flex md:justify-between md:mx-[60px] items-center"
         >
@@ -156,6 +198,7 @@ const DoctorProfile = () => {
                   className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-blue-300 bg-clip-padding px-3 py-[0.32rem] text-xs font-normal text-blue-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-blue-100 file:px-3 file:py-[0.32rem] file:text-blue-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-blue-200 focus:border-primary focus:text-blue-700 focus:shadow-te-primary focus:outline-none dark:border-blue-600 dark:text-blue-200 dark:file:bg-blue-700 dark:file:text-blue-100 dark:focus:border-primary"
                   id="uploadResume"
                   accept="application/pdf"
+                  onChange={(e) => setResume(e.target.files[0])}
                   type="file"
                 />
                 <p className="text-blue-500 text-xs font-bold mt-1">
@@ -259,7 +302,7 @@ const DoctorProfile = () => {
                 type="submit"
                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
-                Register For Approval
+                Save Changes
               </button>
             </div>
           </div>

@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
   
 router.post('/register',upload.fields([{ name: 'file' }, { name: 'resume' }]),doctorController.register)
+router.post('/updatedoctor',upload.fields([{ name: 'file' }, { name: 'resume' }]),doctorController.updateDoctor)
 router.post('/auth',doctorController.authDoctor)
 router.get('/getdoctor/:id',doctorController.getDoctor)
 router.post('/managetime',doctorController.manageTime)
