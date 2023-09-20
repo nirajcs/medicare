@@ -43,7 +43,12 @@ const adminController = {
         await user.save();
 
         if(user){
-            res.status(200).json(user)
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                blocked:user.blocked
+            })
         }else{
             res.status(400).json({error:"Id invalid"})
         }
