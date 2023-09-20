@@ -59,6 +59,7 @@ const userController = {
                 _id: userExists._id,
                 name: userExists.name,
                 email: userExists.email,
+                blocked: userExists.blocked
             });
         }else{
             res.status(400).json({error:"No User Found"})
@@ -75,7 +76,8 @@ const userController = {
           res.json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            blocked: user.blocked
           });
         } else {
           res.status(401);
@@ -104,6 +106,7 @@ const userController = {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                blocked:user.blocked
             });
         }
     }),
@@ -142,6 +145,7 @@ const userController = {
                 _id: userExists._id,
                 name: userExists.name,
                 email: userExists.email,
+                blocked: userExists.blocked
                 });
             } else {
                 res.status(201).json({error:"Invalid OTP"})
