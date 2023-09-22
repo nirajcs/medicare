@@ -3,6 +3,7 @@ import { doctorApi } from '../../axiosApi/axiosInstance'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { FaTrash } from 'react-icons/fa'
+import convertTo12HourFormat from '../../utils/convertTime'
 
 
 const DoctorTimeManagement = () => {
@@ -50,24 +51,6 @@ const DoctorTimeManagement = () => {
             toast.error("Failed to Delete")
         }
     }
-
-    function convertTo12HourFormat(timeString) {
-        const [hours, minutes] = timeString.split(':');
-        const parsedTime = new Date(0, 0, 0, hours, minutes); // Create a Date object with the given time
-      
-        let ampm = 'AM';
-        let formattedHours = parsedTime.getHours();
-        if (formattedHours >= 12) {
-          ampm = 'PM';
-          if (formattedHours > 12) {
-            formattedHours -= 12;
-          }
-        }
-        formattedHours = formattedHours.toString().padStart(2, '0'); // Ensure two-digit format for hours
-        const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two-digit format for minutes
-      
-        return `${formattedHours}:${formattedMinutes} ${ampm}`;
-      }
 
     useEffect(() => {
         const fetchTimings = async ()=>{
