@@ -1,33 +1,87 @@
 import React, { useEffect, useState } from "react";
-import { doctorApi } from "../../axiosApi/axiosInstance";
-import { useLocation } from "react-router-dom";
+import {toast} from 'react-toastify'
+import { doctorApi, usersApi } from "../../axiosApi/axiosInstance";
+import { useLocation, useParams } from "react-router-dom";
 import convertTo12HourFormat from "../../utils/convertTime";
 import formatDate from "../../utils/convertDate";
 import formatDateToUTC from "../../utils/inputDateConvert";
 import slotMaker from "../../utils/slotMaker";
 
+import {loadStripe} from '@stripe/stripe-js'
+import { useSelector } from "react-redux";
+
 const DoctorDetails = () => {
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({}); 
   const [available, setAvailable] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [date, setDate] = useState('')
   const [slot,setSlot] = useState('')
 
+  const {userInfo} = useSelector((state)=>state.auth)
+
   const location = useLocation();
-  const doctorId = location.state;
+  let { id } = useParams();
+  const doctorId = id;
+
+  const bookHandler = async ()=>{
+    if(!date){
+      toast.error("Please select a date")
+      return
+    }
+    
+    const pKey = 'pk_test_51Nub1dSCS75gx8NFs0YlcO9kfh3YvuEWKH9rGnr9c3qghxAGyX0xwkTdJsmLxqC3MnQqn8ilw05nKBdqWGrtK9VP00JHV0BXO6'
+    const stripe = await loadStripe(pKey);
+
+    const { data } = await usersApi.post("/payment", {
+      date:date,
+      user:userInfo._id,
+      doctor:details._id,
+      amount:details.fees
+    });
+
+    localStorage.setItem("bookingSuccess", JSON.stringify({status:true}));
+    
+    const result = await stripe.redirectToCheckout({
+      sessionId: data.id,
+    });
+
+    console.log(result);
+
+    if (result?.error) {
+      toast.error(result.error);
+    }
+  } 
 
   const dateHandler = (e)=>{
+    if(new Date(e.target.value) < Date.now()){
+      toast.error("select a future date")
+      return
+    }
     setSlot('')
     let selectedDate = e.target.value
     let formattedDate = formatDateToUTC(selectedDate)
     console.log(formattedDate)
+
+    //to check already booked slot count
+    let slotCount = 0
+    const existingBookingIndex = bookings.findIndex(
+      (booking) => booking.date === formattedDate
+    );
+    console.log(existingBookingIndex)
+    if(existingBookingIndex == -1){
+      slotCount = 0
+    }else{
+      slotCount = bookings[existingBookingIndex].slots.length
+    }
+
     let check = available.filter((temp)=>temp.date === formattedDate)
     if(check.length>0){
       console.log(check)
-      let slots = slotMaker(check)
+      let slots = slotMaker(check,slotCount)
       setSlot(slots)
       console.log(slots,"special Time")
     }else{
-      let slots = 18 //Slots divided from 10AM to 8PM
+      let slots = 18 - slotCount //Slots divided from 10AM to 8PM
       setSlot(slots)
       console.log("Normal Time")
     }
@@ -37,8 +91,10 @@ const DoctorDetails = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       let res = await doctorApi.get(`/getdoctor/${doctorId}`);
+      console.log(res.data)
       setDetails(res.data);
-      setAvailable(res.data.available);
+      setAvailable(res.data.available);  
+      setBookings(res.data.bookings)
     };
     fetchDoctor();
   }, []);
@@ -97,7 +153,7 @@ const DoctorDetails = () => {
                   id="from"
                 />
               </div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-2 rounded">
+              <button onClick={bookHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-2 rounded">
                 Book Slot
               </button>
             </div>

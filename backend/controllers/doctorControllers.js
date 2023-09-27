@@ -147,6 +147,7 @@ const doctorController = {
             res.status(400).json({message:"Failed to Delete"})
         }
     }),
+
     logoutDoctor : asyncHandler(async(req,res)=>{
         res.cookie('docjwt', '', {
             httpOnly: true,

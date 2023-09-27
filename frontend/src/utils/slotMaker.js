@@ -1,4 +1,4 @@
-function slotMaker(check) {
+function slotMaker(check,oldSlots) {
     // Initialize a variable to keep track of the total combined time in minutes
     let totalMinutes = 0;
   
@@ -17,7 +17,7 @@ function slotMaker(check) {
     }
   
     // Calculate the count of half-hour intervals
-    const halfHourIntervals = Math.floor(totalMinutes / 30);
+    const halfHourIntervals = Math.floor(totalMinutes / 30)-oldSlots;
   
     return halfHourIntervals;
   }

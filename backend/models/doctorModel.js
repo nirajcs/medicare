@@ -52,6 +52,19 @@ const doctorSchema = mongoose.Schema(
         type:String,
         required:true
     },
+    bookings:[
+      {
+        date:{
+          type:Date,
+        },
+        slots: [
+          {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User', // Reference to the User model
+          },
+        ],
+      }
+    ],
     available: [
       {
         date: {
