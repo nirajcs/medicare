@@ -38,7 +38,7 @@ const DoctorList = () => {
         {
           (filteredDoctors.length !== 0)?(
             filteredDoctors.map((doctor,index)=>(
-              <Link to='/doctor-details' key={index} state={doctor._id}>
+              <Link to={`/doctor-details/${doctor._id}`} key={index}>
                 <DoctorCard className='cursor:pointer' details={doctor}/>
               </Link>
             ))

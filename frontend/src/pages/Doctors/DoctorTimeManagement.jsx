@@ -3,7 +3,10 @@ import { doctorApi } from '../../axiosApi/axiosInstance'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { FaTrash } from 'react-icons/fa'
-
+import convertTo12HourFormat from '../../utils/convertTime'
+import formatDate from '../../utils/convertDate'
+import formatDateToUTC from '../../utils/inputDateConvert'
+import checkForClash from '../../utils/timeClashChecker'
 
 const DoctorTimeManagement = () => {
     
@@ -15,12 +18,30 @@ const DoctorTimeManagement = () => {
     const { doctorInfo } = useSelector((state)=>state.docAuth);
     
     const handleSubmit = async () => {
+        if(!date || !from || !to){
+            toast.error("Select all fields")
+            return
+        }
         let docId = doctorInfo._id
         let newBody = {docId,date,from,to}
         let fromTime = new Date(`${date}T${from}:00Z`)
         let toTime = new Date(`${date}T${to}:00Z`)
-        // if (timings.every(obj => new Date(obj.date).getTime() !== new Date(date).getTime())) {
+        // if (timings.every(obj => new Date(obj.date).getTime() === new Date(date).getTime())) {
             // If every date in timings array is not the same as the new date, you can add it
+            let formattedDate = formatDateToUTC(date) 
+            let check = timings.filter((temp)=>temp.date === formattedDate)
+            if(check.length>0){
+                console.log(check);
+                let clashCheck = checkForClash(check,from,to)
+                if(clashCheck){
+                    console.log("same date,clashed");
+                    toast.error("Slot already added for this date and time")
+                    return
+                }
+                console.log("same date,No clash");
+            }
+
+            console.log('Different date');
             if (new Date(date).getTime() > Date.now()) {
               if (fromTime < toTime) {
                 let res = await doctorApi.post('/managetime', newBody);
@@ -37,6 +58,7 @@ const DoctorTimeManagement = () => {
               toast.error('Please add a future date');
             }
         //   } else {
+        //     console.log(timings)
         //     toast.error('Date already added');
         //   }
           
@@ -50,24 +72,6 @@ const DoctorTimeManagement = () => {
             toast.error("Failed to Delete")
         }
     }
-
-    function convertTo12HourFormat(timeString) {
-        const [hours, minutes] = timeString.split(':');
-        const parsedTime = new Date(0, 0, 0, hours, minutes); // Create a Date object with the given time
-      
-        let ampm = 'AM';
-        let formattedHours = parsedTime.getHours();
-        if (formattedHours >= 12) {
-          ampm = 'PM';
-          if (formattedHours > 12) {
-            formattedHours -= 12;
-          }
-        }
-        formattedHours = formattedHours.toString().padStart(2, '0'); // Ensure two-digit format for hours
-        const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two-digit format for minutes
-      
-        return `${formattedHours}:${formattedMinutes} ${ampm}`;
-      }
 
     useEffect(() => {
         const fetchTimings = async ()=>{
@@ -130,7 +134,7 @@ const DoctorTimeManagement = () => {
                                             {index+1}
                                         </th>
                                         <td className="px-6 py-4">
-                                            {time.date}
+                                            {formatDate(time.date)}
                                         </td>
                                         <td className="px-6 py-4">
                                             {convertTo12HourFormat(time.fromTime)}

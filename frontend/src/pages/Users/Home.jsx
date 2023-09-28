@@ -7,15 +7,15 @@ const Home = () => {
         <img className="w-full h-5/6" src="https://img.freepik.com/free-vector/health-professional-team_52683-36023.jpg?w=740&t=st=1695308606~exp=1695309206~hmac=81a62b31c696cc0ad809a42026c67ce4e085d9111b52fdf3a7c1aea329de183f" alt="doctor-banner" />
       </div>
       <div className='flex flex-col md:flex-row w-full pb-5 mb-5 justify-evenly'>
-        <div class="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
+        <div className="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
           <h2 className='font-bold text-xl font-sans mb-2 underline'>CERTIFIED DOCTORS</h2>
           <p>Our website connects users with highly qualified, board-certified doctors, experts in various specialties. They provide top-notch care, ensuring the best healthcare experience. Book an appointment today for expert guidance and peace of mind.</p>
         </div>
-        <div class="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
+        <div className="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
           <h2 className='font-bold text-xl font-sans mb-2 underline'>SECURE PAYMENTS</h2>
           <p>"Our doctor booking website ensures secure payments, safeguarding your financial information with advanced encryption and compliance measures, guaranteeing peace of mind throughout the transaction process."</p>
         </div>
-        <div class="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
+        <div className="mx-5 md:w-1/3 my-3 md:my-0 bg-blue-400 rounded-lg p-3 text-center text-white">
           <h2 className='font-bold text-xl font-sans mb-2 underline'>USER FRIENDLY</h2>
           <p>Our user-friendly website offers intuitive navigation, clear interfaces, and responsive design, ensuring a seamless and enjoyable browsing experience for all visitors, making information access effortless and efficient.</p>
         </div>

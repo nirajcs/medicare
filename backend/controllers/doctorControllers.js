@@ -113,7 +113,7 @@ const doctorController = {
         // console.log(decoded)
         // console.log(docId)
 
-        let newTime = {date:date,fromTime:from,toTime:to}
+        let newTime = { date:date,fromTime:from,toTime:to,expiresAt:date }
         let doctor = await Doctor.updateOne(
             { _id: docId },
             { $push: { available: newTime } });
@@ -147,6 +147,7 @@ const doctorController = {
             res.status(400).json({message:"Failed to Delete"})
         }
     }),
+
     logoutDoctor : asyncHandler(async(req,res)=>{
         res.cookie('docjwt', '', {
             httpOnly: true,

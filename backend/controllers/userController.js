@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
+import { Stripe } from 'stripe'
 import User from '../models/userModel.js'
 import Doctor from '../models/doctorModel.js'
 import generateToken from '../utils/generateToken.js'
@@ -193,6 +194,33 @@ const userController = {
         }else{
             res.status(400).json({error:"Error in Fetching Doctors Data"})
         }
+    }),
+    payment : asyncHandler(async(req,res)=>{
+        console.log(req.body)
+        const { amount,user,doctor,date } = req.body
+        const key = process.env.STRIPE_KEY
+        console.log(key)
+        const stripe = new Stripe(key);
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types:['card'],
+            mode: 'payment',
+            line_items:[
+                {
+                    price_data:{
+                        currency: 'inr',
+                    product_data: {
+                        name: date,
+                    },
+                    unit_amount: amount * 100,
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `http://localhost:3000/successpayment/${user}/${doctor}/${date}`,
+            cancel_url: `http://localhost:3000/doctor-details/${doctor}`
+        })
+
+        res.json({ id: session.id });
     }),
     logoutUser : asyncHandler(async(req,res)=>{
         res.cookie('jwt', '', {

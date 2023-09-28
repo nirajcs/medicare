@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path'
 import multer from 'multer';
 import doctorController from '../controllers/doctorControllers.js';
+import bookingController from '../controllers/bookingController.js';
 
 const router = express.Router();
 

@@ -37,6 +37,7 @@ const Profile = () => {
         ...(email && { email }),
         ...(mobile && { mobile }),
         ...(blood && { blood }),
+        ...(age && { age }),
         ...(gender && { gender }),
         ...(emerPerson && { emerPerson }),
         ...(emerNumber && { emerNumber }),
