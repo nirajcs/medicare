@@ -81,7 +81,7 @@ const DoctorDetails = () => {
       setSlot(slots)
       console.log(slots,"special Time")
     }else{
-      let slots = 18 - slotCount //Slots divided from 10AM to 8PM
+      let slots = 18 - slotCount //Slots divided from 10AM to 8PM.
       setSlot(slots)
       console.log("Normal Time")
     }
