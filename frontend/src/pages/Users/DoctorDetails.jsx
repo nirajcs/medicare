@@ -169,16 +169,16 @@ const DoctorDetails = () => {
             <table className="min-w-full bg-blue-200 text-center text-sm font-light rounded-t-lg">
               <thead className="border-b font-medium dark:border-neutral-500">
                 <tr>
-                  <th scope="col" className="px-3 py-4">
+                  <th scope="col" className="w-16 py-4">
                     #
                   </th>
-                  <th scope="col" className="px-4 py-4">
+                  <th scope="col" className="w-36 py-4">
                     Date
                   </th>
-                  <th scope="col" className="px-4 py-4">
+                  <th scope="col" className="w-36 py-4">
                     From
                   </th>
-                  <th scope="col" className="px-9 py-4">
+                  <th scope="col" className="w-36 py-4">
                     To
                   </th>
                 </tr>
@@ -193,16 +193,16 @@ const DoctorDetails = () => {
                         key={index}
                         className="border-b dark:border-neutral-500"
                       >
-                        <td className="whitespace-nowrap px-5 py-4 font-medium">
+                        <td className="whitespace-nowrap w-16 py-4 font-medium">
                           {index + 1}
                         </td>
-                        <td className="whitespace-nowrap  py-4">
+                        <td className="whitespace-nowrap w-36 py-4">
                           {formatDate(date.date)}
                         </td>
-                        <td className="whitespace-nowrap px-5 py-4">
+                        <td className="whitespace-nowrap w-36 py-4">
                           {convertTo12HourFormat(date.fromTime)}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4">
+                        <td className="whitespace-nowrap w-36 py-4">
                           {convertTo12HourFormat(date.toTime)}
                         </td>
                       </tr>

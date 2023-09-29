@@ -12,58 +12,60 @@ const doctorSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    specialization:{
-        type:String,
-        required:true,
+    specialization: {
+      type: String,
+      required: true,
     },
-    address:{
-        type:String,
-        required:true
+    address: {
+      type: String,
+      required: true,
     },
     password: {
       type: String,
       required: true,
     },
-    approved:{
-        type:Boolean,
-        default:false
+    approved: {
+      type: Boolean,
+      default: false,
     },
-    blocked:{
-      type:Boolean,
-      default:false
+    blocked: {
+      type: Boolean,
+      default: false,
     },
-    imagePath:{
-      type:String,
-      default:''  
+    imagePath: {
+      type: String,
+      default: '',
     },
-    resume:{
-      type:String,
-      default:''  
+    resume: {
+      type: String,
+      default: '',
     },
-    fees:{
-      type:Number,
-      default:0
+    fees: {
+      type: Number,
+      default: 0,
     },
-    qualification:{
-        type:String,
-        required:true
+    qualification: {
+      type: String,
+      required: true,
     },
-    experience:{
-        type:String,
-        required:true
+    experience: {
+      type: String,
+      required: true,
     },
-    bookings:[
+    bookings: [
       {
-        date:{
-          type:Date,
+        date: {
+          type: Date,
         },
         slots: [
           {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User', // Reference to the User model
+            userId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'User', // Reference to the User model
+            },
           },
         ],
-      }
+      },
     ],
     available: [
       {
@@ -86,6 +88,7 @@ const doctorSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
 
   // Match user entered password to hashed password in database
   doctorSchema.methods.matchPassword = async function (enteredPassword) {
