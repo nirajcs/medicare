@@ -43,6 +43,20 @@ const userSchema = mongoose.Schema(
       type:String,
       default:null
     },
+    bookings:[
+      {
+        doctorId:{
+          type:mongoose.Schema.Types.ObjectId,
+          ref:'Doctor'
+        },
+        date:{
+          type:Date
+        },
+        slot:{
+          type:Number
+        }
+      }
+    ],
     age:{
       type:Number,
       default:null
