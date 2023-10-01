@@ -14,6 +14,7 @@ router.post('/otpverify',userController.otpVerify)
 router.get('/user-profile/:id',userController.getUserDetails)
 router.post('/update-user',userController.updateUser)
 router.get('/get-doctors',userController.getDoctors)
+router.get('/get-bookings/:id',userController.getBookings)
 router.post('/payment',userController.payment)
 router.post('/logout',userController.logoutUser)
 

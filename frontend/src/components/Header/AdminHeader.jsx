@@ -1,8 +1,11 @@
 import {useEffect,useRef} from 'react'
 import logo from '../../assets/images/logo.png'
-import { NavLink,Link, useLocation } from 'react-router-dom'
+import { NavLink,Link, useLocation, useNavigate } from 'react-router-dom'
 import { BiMenu } from 'react-icons/bi'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { FiLogOut } from 'react-icons/fi'
+import { useLogoutMutation } from '../../slices/adminSlices/adminApiSlice'
+import { logout } from '../../slices/adminSlices/adminAuthSlice'
 
 const navlinks = [
   {
@@ -28,6 +31,19 @@ const AdminHeader = () => {
 
     const headerRef = useRef(null)
     const menuRef = useRef(null)
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [logoutApiCall] = useLogoutMutation();
+    const logoutHandler = async()=>{
+      try {
+        await logoutApiCall().unwrap();
+        dispatch(logout());
+        navigate('/admin');
+      } catch (err) {
+        console.log(err)
+      }
+    }
   
     const handleStickyHeader = ()=>{
       window.addEventListener('scroll',()=>{
@@ -69,6 +85,12 @@ const AdminHeader = () => {
                           </li>
                         )
                       }
+                      <li onClick={logoutHandler} className='md:hidden font-bold text-red-500'>
+                        LOGOUT
+                      </li>
+                      <li className='hidden md:block'>
+                        <FiLogOut onClick={logoutHandler} style={{ fontSize: '2rem', cursor:'pointer', color: 'blue', backgroundColor:'#fff2e6' }}/>
+                      </li>
                     </ul>
                   </div>
                   <span className='md:hidden' onClick={toggleMenu}>

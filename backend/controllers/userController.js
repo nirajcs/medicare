@@ -66,6 +66,7 @@ const userController = {
             res.status(400).json({error:"No User Found"})
         }
     }),
+
     authUser : asyncHandler(async(req,res)=>{
         const { email, password } = req.body;
 
@@ -153,6 +154,7 @@ const userController = {
             }
         }
     }),
+
     getUserDetails : asyncHandler(async(req,res)=>{
         let id = req.params.id
         let user = await User.findById(id,{password:0,otp:0})
@@ -163,6 +165,7 @@ const userController = {
             throw new Error('User not Found');
         }
     }),
+
     updateUser : asyncHandler(async(req,res)=>{
         const {id,name,email,mobile,blood,age,gender,emerPerson,emerNumber,password} = req.body
         let user = await User.findById(id);
@@ -187,6 +190,7 @@ const userController = {
         }
         
     }),
+
     getDoctors : asyncHandler(async(req,res)=>{
         let doctors = await Doctor.find({},{password:0})
         if(doctors){
@@ -195,6 +199,52 @@ const userController = {
             res.status(400).json({error:"Error in Fetching Doctors Data"})
         }
     }),
+
+    getBookings : asyncHandler(async (req, res) => {
+        const { id } = req.params;
+      
+        try {
+          const user = await User.findOne({ _id: id });
+          if (!user) {
+            return res.status(400).json({ error: "User not found" });
+          }
+      
+          const userBookingDetails = await User.aggregate([
+            { $match: { _id: user._id } },
+            {
+              $unwind: "$bookings",
+            },
+            {
+              $lookup: {
+                from: "doctors", // Assuming "doctors" is the name of your Doctor collection
+                localField: "bookings.doctorId",
+                foreignField: "_id",
+                as: "doctor",
+              },
+            },
+            {
+              $unwind: "$doctor",
+            },
+            {
+              $project: {
+                _id: 0, // Exclude _id field
+                doctorName: "$doctor.name",
+                doctorSpecialization: "$doctor.specialization", // Use 'specialization' instead of 'contact'
+                date: "$bookings.date",
+                slot: "$bookings.slot",
+              },
+            },
+            {
+                $sort: { date: -1 }, 
+            },
+          ]);
+      
+          res.status(200).json(userBookingDetails);
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+    }),
+
     payment : asyncHandler(async(req,res)=>{
         console.log(req.body)
         const { amount,user,doctor,date } = req.body
@@ -222,6 +272,7 @@ const userController = {
 
         res.json({ id: session.id });
     }),
+
     logoutUser : asyncHandler(async(req,res)=>{
         res.cookie('jwt', '', {
             httpOnly: true,

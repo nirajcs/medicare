@@ -5,6 +5,12 @@ import './index.css'
 import store from './store.js'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
+import "datatables.net-dt/css/jquery.dataTables.css";
+import $ from "jquery";
+
+window.jQuery = $;
+window.$ = $;
+ 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
