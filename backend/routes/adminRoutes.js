@@ -4,6 +4,7 @@ import adminController from '../controllers/adminController.js'
 const router = express.Router();
 
 router.post('/auth',adminController.auth);
+router.get('/getDashboardDetails',adminController.allDetails)
 router.get('/userdata',adminController.getUsers);
 router.put('/block-user/:id',adminController.blockUsers);
 router.put('/approve/:id',adminController.approveDoctors);

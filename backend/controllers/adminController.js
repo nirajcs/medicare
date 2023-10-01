@@ -19,6 +19,28 @@ const adminController = {
             throw new Error('Invalid mail or password')
         }
     }),
+
+    allDetails : asyncHandler(async(req,res)=>{
+      try {
+        const totalUsers = await User.countDocuments();
+        
+        const totalDoctors = await Doctor.countDocuments();
+        
+        const totalApprovedDoctors = await Doctor.countDocuments({ approved: true });
+        
+        const allUsers = await User.find({});
+        const totalBookings = allUsers.reduce((total, user) => total + user.bookings.length, 0);
+        
+        return res.json({
+          totalUsers,
+          totalDoctors,
+          totalApprovedDoctors,
+          totalBookings,
+        });
+      } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    }),
     
     getUsers : asyncHandler(async(req,res)=>{
         let users = await User.find({},{password:0,sub:0})
