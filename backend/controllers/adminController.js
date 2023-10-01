@@ -19,6 +19,7 @@ const adminController = {
             throw new Error('Invalid mail or password')
         }
     }),
+    
     getUsers : asyncHandler(async(req,res)=>{
         let users = await User.find({},{password:0,sub:0})
         if(users){
@@ -27,6 +28,7 @@ const adminController = {
             res.status(400).json("Error in fetching")
         }
     }),
+
     getDoctors : asyncHandler(async(req,res)=>{
         let doctors = await Doctor.find({},{password:0})
         if(doctors){
@@ -35,6 +37,73 @@ const adminController = {
             res.status(400).json("Error in Fetching")
         }
     }),
+
+    getBookings: asyncHandler(async (req, res) => {
+        try {
+          const usersWithBookings = await User.aggregate([
+            {
+              $lookup: {
+                from: 'doctors',
+                localField: 'bookings.doctorId',
+                foreignField: '_id',
+                as: 'doctor',
+              },
+            },
+            {
+              $unwind: '$doctor',
+            },
+            {
+              $unwind: '$bookings',
+            },
+            {
+              $project: {
+                _id: 0,
+                userName: '$name',
+                userEmail: '$email',
+                doctorName: '$doctor.name',
+                doctorEmail: '$doctor.email',
+                doctorSpecialization: '$doctor.specialization',
+                date: '$bookings.date',
+                slot: '$bookings.slot',
+              },
+            },
+            {
+              $addFields: {
+                formattedDate: {
+                  $dateToString: {
+                    format: '%d/%m/%Y', // Format the date as dd/mm/yyyy
+                    date: '$date',
+                  },
+                },
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  userName: '$userName',
+                  userEmail: '$userEmail',
+                  doctorName: '$doctorName',
+                  doctorEmail: '$doctorEmail',
+                  doctorSpecialization: '$doctorSpecialization',
+                  date: '$formattedDate',
+                  slot: '$slot',
+                },
+              },
+            },
+            {
+              $replaceRoot: { newRoot: '$_id' },
+            },
+            {
+              $sort: { date: -1 },
+            },
+          ]);
+      
+          res.status(200).json(usersWithBookings);
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+    }),
+      
     blockUsers : asyncHandler(async(req,res)=>{
         let userId = req.params.id
         let user = await User.findById(userId)
@@ -53,6 +122,7 @@ const adminController = {
             res.status(400).json({error:"Id invalid"})
         }
     }),
+
     approveDoctors : asyncHandler(async(req,res)=>{
         let docId = req.params.id
         let doctor = await Doctor.findById(docId)
@@ -67,6 +137,7 @@ const adminController = {
         }
 
     }),
+
     blockDoctor : asyncHandler(async(req,res)=>{
         let docId = req.params.id
         let doctor = await Doctor.findById(docId)
@@ -79,8 +150,8 @@ const adminController = {
         }else{
             res.status(400).json({error:"Id invalid"})
         }
-
     }),
+
     logoutAdmin : asyncHandler(async(req,res)=>{
         res.cookie('admnjwt', '', {
             httpOnly: true,

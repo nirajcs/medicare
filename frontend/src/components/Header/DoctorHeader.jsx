@@ -84,8 +84,15 @@ const DoctorHeader = () => {
                           </li>
                         )
                       }
+                      <li className='block md:hidden'>
+                        <NavLink to='/doctors/profile' className={navClass=>navClass.isActive?'text-primaryColor text-[16px] loading-7 font-[600]' : 'text-textColor text-[16px] loading-7 font-[500] hover:text-primaryColor'}>Profile</NavLink>
+                      </li>
+                      <li className='block md:hidden'>
+                        <button onClick={logoutHandler} className="block md:hidden text-red-500 font-medium rounded-lg loading-7 mt-6 text-sm">LOGOUT</button>
+                      </li>
+
                       <li className='pt-5'>                      
-                    <Menu as="div" className="relative inline-block text-left">
+                      <Menu as="div" className="relative hidden md:inline-block text-left">
                       <div>
                         <Menu.Button className="inline-flex w-full justify-center rounded-md bg-white text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50">
                           <VscAccount style={{ fontSize: '2rem', color: 'blue', backgroundColor:'#fff2e6' }}/>

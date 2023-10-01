@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import Doctor from "../models/doctorModel.js";
 import generateToken from '../utils/doctorGenerateToken.js';
+import mongoose from 'mongoose';
 
 const doctorController = {
     authDoctor:asyncHandler(async(req,res)=>{
@@ -100,19 +101,47 @@ const doctorController = {
             throw new Error("Unable to find Doctor")
         }
     }),
+    bookingDetails: asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const doctorId = id;
+      
+        try {
+          const pipeline = [
+            { $match: { _id: new mongoose.Types.ObjectId(doctorId) } },
+            { $unwind: '$bookings' },
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'bookings.slots.userId',
+                foreignField: '_id',
+                as: 'userDetails',
+              },
+            },
+            { $unwind: '$userDetails' },
+            {
+              $project: {
+                date: '$bookings.date', // Include the booking date
+                name: '$userDetails.name',
+                email: '$userDetails.email',
+                blood: '$userDetails.blood', // Add 'blood' field if it exists in your schema
+                position: {
+                  $indexOfArray: ['$bookings.slots.userId', '$userDetails._id'], // Calculate the position
+                },
+              },
+            },
+          ];
+      
+          const bookingDetails = await Doctor.aggregate(pipeline);
+      
+          res.status(200).json(bookingDetails);
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+      }),
+          
+      
     manageTime : asyncHandler(async(req,res)=>{
         const {docId,date,from,to} = req.body
-        // console.log(req.body)
-        // console.log("HIIIIII")
-
-        //Decode docId from docjwt
-        // let token = req.cookies.docjwt
-        // console.log(token)
-        // let decoded = jwt.verify(token, process.env.JWT_SECRET);
-        // let docId = decoded.doctorId
-        // console.log(decoded)
-        // console.log(docId)
-
         let newTime = { date:date,fromTime:from,toTime:to,expiresAt:date }
         let doctor = await Doctor.updateOne(
             { _id: docId },

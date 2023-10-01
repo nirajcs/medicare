@@ -9,6 +9,7 @@ router.put('/block-user/:id',adminController.blockUsers);
 router.put('/approve/:id',adminController.approveDoctors);
 router.put('/block-doctor/:id',adminController.blockDoctor);
 router.get('/doctordata',adminController.getDoctors);
+router.get('/booking-details',adminController.getBookings)
 router.post('/logout',adminController.logoutAdmin);
 
 export default router;

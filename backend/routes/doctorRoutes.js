@@ -25,6 +25,7 @@ router.post('/register',upload.fields([{ name: 'file' }, { name: 'resume' }]),do
 router.post('/updatedoctor',upload.fields([{ name: 'file' }, { name: 'resume' }]),doctorController.updateDoctor)
 router.post('/auth',doctorController.authDoctor)
 router.get('/getdoctor/:id',doctorController.getDoctor)
+router.get('/booking-details/:id',doctorController.bookingDetails)
 router.post('/managetime',doctorController.manageTime)
 router.get('/delete-timing/:docId/:id',doctorController.deleteTimings) 
 router.get('/get-timings/:id',doctorController.getTimings)
