@@ -6,6 +6,7 @@ import EmailVerify from '../pages/Users/EmailVerify'
 import Profile from '../pages/Users/Profile'
 import DoctorList from '../pages/Users/DoctorList'
 import DoctorDetails from '../pages/Users/DoctorDetails'
+import UserChats from '../pages/Users/UserChats'
 import Bookings from '../pages/Users/Bookings'
 import SuccessPayment from '../pages/Users/SuccessPayment'
 
@@ -14,6 +15,7 @@ import DoctorRegister from '../pages/Doctors/DoctorRegister'
 import Doctors from '../pages/Doctors/Doctors'
 import MyAppointments from '../pages/Doctors/MyAppointments'
 import DoctorTimeManagement from '../pages/Doctors/DoctorTimeManagement'
+import DoctorChat from '../pages/Doctors/DoctorChat'
 import DoctorProfile from '../pages/Doctors/DoctorProfile'
 
 import AdminLogin from '../pages/Admin/AdminLogin'
@@ -40,6 +42,7 @@ const Routers = () => {
           <Route path='/bookings' element={<Bookings/>}/>
           <Route path='/doctorlist' element={<DoctorList/>}/>
           <Route path='/doctor-details/:id' element={<DoctorDetails/>}/>
+          <Route path='/chats/:chatid' element={<UserChats/>}/>
           <Route path='/successpayment/:user/:doctor/:date' element={<SuccessPayment/>}/>
         </Route>
         
@@ -50,6 +53,7 @@ const Routers = () => {
           <Route path='/doctors/home' element={<Doctors/>}/>
           <Route path='/doctors/appointments' element={<MyAppointments/>}/>
           <Route path='/doctors/managetime' element={<DoctorTimeManagement/>}/>
+          <Route path='/doctors/chats' element={<DoctorChat/>}/>
           <Route path='/doctors/profile' element={<DoctorProfile/>}/>          
         </Route>
 

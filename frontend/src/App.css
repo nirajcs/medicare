@@ -39,6 +39,15 @@
     color: rgb(66, 66, 66) !important;
   }
 
+  /* CSS for the floating message */
+.floating-message {
+  position: fixed;
+  bottom: 50px;
+  right: 0;
+  margin: 20px; /* Adjust this value for desired spacing from the bottom and right */
+  z-index: 999; /* Adjust the z-index to ensure it's above other content */
+}
+
   @media only screen and (max-width:768px){
     .navigation{
       width: 100%;
