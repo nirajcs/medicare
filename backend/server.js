@@ -49,6 +49,44 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound)
 app.use(errorHandler)
 
-app.listen(port,()=>{
+const server = app.listen(port,()=>{
     console.log(`Server started on port ${port}`)
+})
+
+import { Server } from 'socket.io'
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+}); 
+
+io.on("connection",(socket)=>{
+  console.log("connected with socket io");
+
+  socket.on("setup",(userData)=>{
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
+
+  socket.on('join chat',(room)=>{
+    socket.join(room);
+    console.log("User Joined room:"+room);
+  })
+
+  socket.on('new message',(newMessageReceived)=>{
+    var chat = newMessageReceived.room;
+    if(!chat.user || !chat.doctor){
+      return console.log('chat.users not defined')
+    }
+    
+    if(chat.user._id === newMessageReceived.sender._id){
+      socket.to(chat.doctor._id).emit("message received",newMessageReceived)
+    }
+
+    if(chat.doctor._id === newMessageReceived.sender._id){
+      socket.to(chat.user._id).emit("message received",newMessageReceived)
+    }
+  })    
 })

@@ -4,6 +4,11 @@ import { usersApi } from '../../axiosApi/axiosInstance'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
+import io from 'socket.io-client'
+
+const ENDPOINT = 'http://localhost:5000';
+var socket,selectedChatCompare;
+
 const UserChats = () => {
     const { userInfo } = useSelector((state) => state.auth);
     
@@ -13,18 +18,29 @@ const UserChats = () => {
     const [doctor,setDoctor] = useState('');
     const [content,setContent] = useState('');
     const [messageSent,setMessageSent] = useState(false)
+    const [socketConnected,setSocketConnected] = useState(false)
 
     const { chatid } = useParams();
+
+    useEffect(()=>{
+        socket = io(ENDPOINT);
+        socket.emit("setup",userInfo)
+        socket.on('connection',()=>setSocketConnected(true))
+    },[])
+
 
     const sendHandler = async()=>{
         if(content===''){
             toast.error("Message cannot be empty")
+            return
         }
         try {
             let res = await usersApi.post(`/sendchat/${chatId}/${userInfo._id}/User`,{content})
             if(res){
+                console.log(res.data)
                 setContent('')
                 setMessageSent(true)
+                socket.emit('new message',res.data)
             }
         } catch (error) {
             console.log(error.message)
@@ -41,13 +57,25 @@ const UserChats = () => {
         let fetchMessages = async () => {
             let res = await usersApi.get(`/get-room-messages/${chatId}`);
             if (res) {
-                console.log(res.data);
                 setChats(res.data)
                 setMessageSent(false)
+                socket.emit("join chat",chatId)
             }
         };
         fetchMessages();
+        selectedChatCompare = chats;
     }, [chatId,messageSent]);
+
+    useEffect(() => {
+        socket.on('message received',(newMessageReceived)=>{
+            if(!selectedChatCompare || chatId!==newMessageReceived.room._id){
+
+            }else{
+                setChats([...chats,newMessageReceived])
+            }
+        })
+    })
+    
 
     useEffect(() => {
         if (userInfo._id) {
@@ -62,7 +90,7 @@ const UserChats = () => {
   return (
     <section className="container h-screen flex-col h-5/6">
         <div className='flex h-4/5 w-full bg-blue-200 border-r-2 rounded-lg'>
-            <div className='w-1/3 p-5 overflow-y-auto'>
+            <div className='w-1/3 p-5 overflow-y-auto'> 
                 {
                     rooms.length > 0 ?(
                         rooms.map((chat,index)=>(

@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 import { doctorApi } from '../../axiosApi/axiosInstance';
 import { toast } from 'react-toastify'
 
+import io from 'socket.io-client'
+
+const ENDPOINT = 'http://localhost:5000';
+var socket,selectedChatCompare;
 
 const DoctorChat = () => {
     const { doctorInfo } = useSelector((state) => state.docAuth);
@@ -13,16 +17,25 @@ const DoctorChat = () => {
     const [patient,setPatient] = useState('');
     const [content,setContent] = useState('');
     const [messageSent,setMessageSent] = useState(false)
+    const [socketConnected,setSocketConnected] = useState(false)
+
+    useEffect(()=>{
+        socket = io(ENDPOINT);
+        socket.emit("setup",doctorInfo)
+        socket.on('connection',()=>setSocketConnected(true))
+    },[])
 
     const sendHandler = async()=>{
         if(content===''){
             toast.error("Message cannot be empty")
+            return
         }
         try {
             let res = await doctorApi.post(`/sendchat/${chatId}/${doctorInfo._id}/Doctor`,{content})
             if(res){
                 setContent('')
                 setMessageSent(true)
+                socket.emit('new message',res.data)
             }
         } catch (error) {
             console.log(error.message)
@@ -36,10 +49,22 @@ const DoctorChat = () => {
                 console.log(res.data);
                 setChats(res.data)
                 setMessageSent(false)
+                socket.emit("join chat",chatId)
             }
         };
         fetchMessages();
+        selectedChatCompare = chats;
     }, [chatId,messageSent]);
+
+    useEffect(() => {
+        socket.on('message received',(newMessageReceived)=>{
+            if(!selectedChatCompare || chatId!==newMessageReceived.room._id){
+
+            }else{
+                setChats([...chats,newMessageReceived])
+            }
+        })
+    })
 
     useEffect(() => {
         if (doctorInfo._id) {
