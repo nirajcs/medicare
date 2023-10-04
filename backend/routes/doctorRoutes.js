@@ -3,6 +3,7 @@ import path from 'path'
 import multer from 'multer';
 import doctorController from '../controllers/doctorControllers.js';
 import bookingController from '../controllers/bookingController.js';
+import chatController from '../controllers/chatController.js';
 
 const router = express.Router();
 
@@ -30,5 +31,9 @@ router.post('/managetime',doctorController.manageTime)
 router.get('/delete-timing/:docId/:id',doctorController.deleteTimings) 
 router.get('/get-timings/:id',doctorController.getTimings)
 router.post('/logout',doctorController.logoutDoctor)
+
+router.get('/get-doctor-rooms/:doctor',chatController.getDoctorsRooms)
+router.post('/sendchat/:chatid/:sender/:type',chatController.chatSend)
+router.get('/get-room-messages/:roomid',chatController.getMessages)
 
 export default router 

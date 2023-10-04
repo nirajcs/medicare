@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {toast} from 'react-toastify'
+import { AiFillMessage } from 'react-icons/ai'
 import { doctorApi, usersApi } from "../../axiosApi/axiosInstance";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import convertTo12HourFormat from "../../utils/convertTime";
 import formatDate from "../../utils/convertDate";
 import formatDateToUTC from "../../utils/inputDateConvert";
@@ -19,6 +20,7 @@ const DoctorDetails = () => {
 
   const {userInfo} = useSelector((state)=>state.auth)
 
+  const navigate = useNavigate();
   const location = useLocation();
   let { id } = useParams();
   const doctorId = id;
@@ -86,6 +88,13 @@ const DoctorDetails = () => {
       console.log("Normal Time")
     }
     setDate(selectedDate)
+  }
+
+  const chatHandler = async()=>{
+    let res = await usersApi.post(`/get-or-createroom/${userInfo._id}/${doctorId}`)
+    if(res){
+      navigate(`/chats/${res.data._id}`)
+    }
   }
 
   useEffect(() => {
@@ -248,6 +257,9 @@ const DoctorDetails = () => {
             ))}
           </h4>
         </div>
+      </div>
+      <div className="floating-message">
+        <AiFillMessage onClick={chatHandler} style={{ fontSize: '3rem', color: 'blue' , cursor:'pointer'}}/>
       </div>
     </section>
   );

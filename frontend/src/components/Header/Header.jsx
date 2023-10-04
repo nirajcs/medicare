@@ -20,6 +20,10 @@ const navlinks = [
   {
     path:'/bookings',
     display:'Bookings'
+  },
+  {
+    path:'/chats/allchats',
+    display:'Chats'
   }
 ]
 
