@@ -61,69 +61,46 @@ const adminController = {
     }),
 
     getBookings: asyncHandler(async (req, res) => {
-        try {
-          const usersWithBookings = await User.aggregate([
-            {
-              $lookup: {
-                from: 'doctors',
-                localField: 'bookings.doctorId',
-                foreignField: '_id',
-                as: 'doctor',
-              },
-            },
-            {
-              $unwind: '$doctor',
-            },
-            {
-              $unwind: '$bookings',
-            },
-            {
-              $project: {
-                _id: 0,
-                userName: '$name',
-                userEmail: '$email',
-                doctorName: '$doctor.name',
-                doctorEmail: '$doctor.email',
-                doctorSpecialization: '$doctor.specialization',
-                date: '$bookings.date',
-                slot: '$bookings.slot',
-              },
-            },
-            {
-              $addFields: {
-                formattedDate: {
-                  $dateToString: {
-                    format: '%d/%m/%Y', // Format the date as dd/mm/yyyy
-                    date: '$date',
-                  },
-                },
-              },
-            },
-            {
-              $group: {
-                _id: {
-                  userName: '$userName',
-                  userEmail: '$userEmail',
-                  doctorName: '$doctorName',
-                  doctorEmail: '$doctorEmail',
-                  doctorSpecialization: '$doctorSpecialization',
-                  date: '$formattedDate',
-                  slot: '$slot',
-                },
-              },
-            },
-            {
-              $replaceRoot: { newRoot: '$_id' },
-            },
-            {
-              $sort: { date: -1 },
-            },
-          ]);
-      
-          res.status(200).json(usersWithBookings);
-        } catch (error) {
-          res.status(500).json({ error: error.message });
-        }
+      try {
+        // Find all users with their bookings and populate the doctorId
+        const users = await User.find({}).populate({
+          path: 'bookings.doctorId', // Populate the 'doctorId' field in the 'bookings' array
+          select: 'name email specialization', // Select the fields you want from the doctor document
+        });
+    
+        // Create an array to hold the result
+        const result = [];
+    
+        // Loop through users and their bookings
+        users.forEach((user) => {
+          user.bookings.forEach((booking) => {
+            // Convert the date to 'dd/mm/yyyy' format
+            const bookingDate = new Date(booking.date);
+            const formattedDate = `${bookingDate.getDate()}/${bookingDate.getMonth() + 1}/${bookingDate.getFullYear()}`;
+    
+            // Create a booking document with user details, doctor details, and formatted date
+            const bookingDetails = {
+              userName: user.name,
+              userEmail: user.email,
+              doctorName: booking.doctorId.name,
+              doctorEmail: booking.doctorId.email,
+              doctorSpecialization: booking.doctorId.specialization,
+              date: formattedDate, // Use the formatted date
+              slot: booking.slot,
+            };
+    
+            // Add the booking document to the result array
+            result.push(bookingDetails);
+          });
+        });
+    
+        // Send the result as a JSON response
+        res.json(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    
     }),
       
     blockUsers : asyncHandler(async(req,res)=>{

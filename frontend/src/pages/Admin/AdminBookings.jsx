@@ -7,6 +7,7 @@ const AdminBookings = () => {
   useEffect(()=>{
     const fetchBookings = async()=>{
       let res = await adminApi.get('/booking-details')
+      console.log(res.data);
       setBookings(res.data)
     }
     fetchBookings()
@@ -14,7 +15,7 @@ const AdminBookings = () => {
   return (
     <section className='container'>
       <div className='container h-screen'>
-        {bookings.length > 0 && <DataTableComponent data={bookings} />}
+        {bookings && <DataTableComponent data={bookings} />}
       </div>
     </section>
   )

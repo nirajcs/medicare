@@ -11,7 +11,7 @@ const bookingController = {
     let slot = -1;
 
     try {
-      let doctorDetails = await Doctor.findOne({ _id: doctor });
+      const doctorDetails = await Doctor.findOne({ _id: doctor });
 
       if (doctorDetails) {
         // Find the index of the booking with the same date
@@ -35,7 +35,7 @@ const bookingController = {
         const saveBooking = await doctorDetails.save();
 
         if (saveBooking) {
-          let userBooking = await User.findOne({ _id: user });
+          const userBooking = await User.findOne({ _id: user });
           if (userBooking) {
             let details = {
               doctorId: doctor,
@@ -43,7 +43,7 @@ const bookingController = {
               slot: slot
             };
             userBooking.bookings.push(details);
-            let saveBooking = await userBooking.save();
+            const saveBooking = await userBooking.save();
 
             if (saveBooking) {
               res.status(200).json({ message: "Saved booking" });
