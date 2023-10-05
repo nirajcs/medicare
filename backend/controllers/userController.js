@@ -156,8 +156,8 @@ const userController = {
     }),
 
     getUserDetails : asyncHandler(async(req,res)=>{
-        let id = req.params.id
-        let user = await User.findById(id,{password:0,otp:0})
+        const id = req.params.id
+        const user = await User.findById(id,{password:0,otp:0})
         if(user){
             res.status(200).json(user);
         }else{
@@ -168,7 +168,7 @@ const userController = {
 
     updateUser : asyncHandler(async(req,res)=>{
         const {id,name,email,mobile,blood,age,gender,emerPerson,emerNumber,password} = req.body
-        let user = await User.findById(id);
+        const user = await User.findById(id);
 
         user.name = name?name:user.name;
         user.email = email?email:user.email
@@ -192,7 +192,7 @@ const userController = {
     }),
 
     getDoctors : asyncHandler(async(req,res)=>{
-        let doctors = await Doctor.find({},{password:0})
+        const doctors = await Doctor.find({},{password:0})
         if(doctors){
             res.status(200).json({doctorsData:doctors})
         }else{

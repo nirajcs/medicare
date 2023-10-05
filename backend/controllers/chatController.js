@@ -21,7 +21,7 @@ const chatController = {
                 await chatRoom.save();
             }
 
-            let roomDetails = await ChatRoom.findOne({_id:chatRoom._id}).populate({path:'doctor',select:'_id name specialization'})
+            const roomDetails = await ChatRoom.findOne({_id:chatRoom._id}).populate({path:'doctor',select:'_id name specialization'})
             
             res.status(200).json(roomDetails);
         } catch (error) {
@@ -64,7 +64,7 @@ const chatController = {
     //User side
     getRooms : asyncHandler(async(req,res)=>{
         const { user } = req.params
-        let rooms = await ChatRoom.find({user:user}).populate({path:'doctor',select:'_id name email specialization'})
+        const rooms = await ChatRoom.find({user:user}).populate({path:'doctor',select:'_id name email specialization'})
         if(rooms){
             res.status(200).json(rooms)
         }else{
@@ -75,7 +75,7 @@ const chatController = {
     //Doctors side
     getDoctorsRooms : asyncHandler(async(req,res)=>{
         const { doctor } = req.params
-        let rooms = await ChatRoom.find({doctor:doctor}).populate({path:'user',select:'_id name email'})
+        const rooms = await ChatRoom.find({doctor:doctor}).populate({path:'user',select:'_id name email'})
         if(rooms){
             res.status(200).json(rooms)
         }else{

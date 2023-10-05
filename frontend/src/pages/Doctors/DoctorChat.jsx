@@ -88,7 +88,9 @@ const DoctorChat = () => {
                             </div>
                         ))
                     ):(
-                        <p className='text-blue-600'>No Chats</p>
+                        <div className='flex h-full justify-center items-center'>
+                            <p className='text-blue-600 font-bold'>No Chats</p>
+                        </div>
                     )
                 }
             </div>

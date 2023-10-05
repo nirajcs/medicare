@@ -92,8 +92,8 @@ const doctorController = {
         }
     }),
     getDoctor : asyncHandler(async(req,res)=>{
-        let {id} = req.params
-        let doctor = await Doctor.findOne({_id:id},{password:0})
+        const {id} = req.params
+        const doctor = await Doctor.findOne({_id:id},{password:0})
         if(doctor){
             res.status(200).json(doctor)
         }else{
@@ -129,6 +129,11 @@ const doctorController = {
                 },
               },
             },
+            {
+                $sort: {
+                    position: 1, // Sort by position in ascending order
+                },
+            },
           ];
       
           const bookingDetails = await Doctor.aggregate(pipeline);
@@ -143,7 +148,7 @@ const doctorController = {
     manageTime : asyncHandler(async(req,res)=>{
         const {docId,date,from,to} = req.body
         let newTime = { date:date,fromTime:from,toTime:to,expiresAt:date }
-        let doctor = await Doctor.updateOne(
+        const doctor = await Doctor.updateOne(
             { _id: docId },
             { $push: { available: newTime } });
         if(doctor){
@@ -160,7 +165,7 @@ const doctorController = {
     }),
     getTimings : asyncHandler(async(req,res)=>{
         const { id } = req.params
-        let doctor = await Doctor.findOne({_id:id})
+        const doctor = await Doctor.findOne({_id:id})
         if(doctor){
             res.status(200).json({timings:doctor.available})
         }else{
@@ -169,7 +174,7 @@ const doctorController = {
     }),
     deleteTimings : asyncHandler(async(req,res)=>{
         const { docId,id } = req.params
-        let doctor = await Doctor.findByIdAndUpdate(docId,{$pull: { available: { _id: id } }})
+        const doctor = await Doctor.findByIdAndUpdate(docId,{$pull: { available: { _id: id } }})
         if(doctor){
             res.status(200).json({message:"Successfully Deleted"})
         }else{
