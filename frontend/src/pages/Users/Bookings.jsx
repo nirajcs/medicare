@@ -15,8 +15,8 @@ const Bookings = () => {
         fetchBookings()
     },[])
   return (
-    <section className='container'>
-        <div className='container h-screen'>
+    <section className='container h-screen'>
+        <div className='container h-4/5 overflow-y-auto overflow-x-hidden'>
             <div className="flex bg-blue-100 border-2 border-blue-300 flex-col rounded-lg">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
