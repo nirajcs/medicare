@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import Doctor from "../models/doctorModel.js";
 import generateToken from '../utils/doctorGenerateToken.js';
+import User from '../models/userModel.js'
 import mongoose from 'mongoose';
 
 const doctorController = {
@@ -101,48 +102,52 @@ const doctorController = {
             throw new Error("Unable to find Doctor")
         }
     }),
+
     bookingDetails: asyncHandler(async (req, res) => {
         const { id } = req.params;
         const doctorId = id;
       
         try {
-          const pipeline = [
-            { $match: { _id: new mongoose.Types.ObjectId(doctorId) } },
-            { $unwind: '$bookings' },
-            {
-              $lookup: {
-                from: 'users',
-                localField: 'bookings.slots.userId',
-                foreignField: '_id',
-                as: 'userDetails',
-              },
-            },
-            { $unwind: '$userDetails' },
-            {
-              $project: {
-                date: '$bookings.date', // Include the booking date
-                name: '$userDetails.name',
-                email: '$userDetails.email',
-                blood: '$userDetails.blood', // Add 'blood' field if it exists in your schema
-                position: {
-                  $indexOfArray: ['$bookings.slots.userId', '$userDetails._id'], // Calculate the position
-                },
-              },
-            },
-            {
-                $sort: {
-                    position: 1, // Sort by position in ascending order
-                },
-            },
-          ];
+          // Find the doctor by ID
+          const doctor = await Doctor.findById(doctorId);
       
-          const bookingDetails = await Doctor.aggregate(pipeline);
+          if (!doctor) {
+            return res.status(404).json({ error: 'Doctor not found' });
+          }
+      
+          // Create an array to store all booking details
+          const bookingDetails = [];
+      
+          // Iterate through the doctor's bookings
+          for (const booking of doctor.bookings) {
+            const bookingDate = booking.date;
+            
+            // Iterate through the slots for each booking
+            for (const slot of booking.slots) {
+              // Find the user by ID and populate user details
+              const user = await User.findById(slot.userId);
+      
+              if (user) {
+                const bookingDetail = {
+                  name: user.name,
+                  email: user.email,
+                  blood: user.blood,
+                  date: bookingDate,
+                  slotNumber: booking.slots.indexOf(slot), // Slot number
+                };
+      
+                // Push the booking detail to the array
+                bookingDetails.push(bookingDetail);
+              }
+            }
+          }
       
           res.status(200).json(bookingDetails);
         } catch (error) {
           res.status(500).json({ error: error.message });
         }
       }),
+      
           
       
     manageTime : asyncHandler(async(req,res)=>{
