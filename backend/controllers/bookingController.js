@@ -46,7 +46,7 @@ const bookingController = {
             const saveBooking = await userBooking.save();
 
             if (saveBooking) {
-              res.status(200).json({ message: "Saved booking" });
+              res.status(200).json(details);
             } else {
               res.status(400).json({ error: "Failed to save" });
             }
