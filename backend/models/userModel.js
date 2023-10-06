@@ -54,6 +54,10 @@ const userSchema = mongoose.Schema(
         },
         slot:{
           type:Number
+        },
+        createdAt:{
+          type:Date,
+          default:Date.now()
         }
       }
     ],

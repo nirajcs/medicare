@@ -43,20 +43,26 @@ const SuccessPayment = () => {
     )
   }
   return(
-    <section className='px-5 h-screen lg:px-0'>
-      <div className='text-center bg-green-100 w-full max-w-[700px] mx-auto rounded-lg shadow-md p-5'>
-        <div className='flex justify-center'>
-          <BsPatchCheckFill style={{ fontSize: '60px',color: 'green' }}/>
-        </div>
-        <h3 className='my-5 text-green-700 text-[22px] font-bold'>
-          Your booking was successfull
-        </h3>
-        <h3 className='my-5 text-green-500 text-[15px] font-bold'>
-          Your slot number is {details ? details.slot : null}
-        </h3>
-        <Link to='/'><h6 className='my-5 text-sm text-blue-500 underline'>Go to home page</h6></Link>
-      </div>
-    </section>
+    <>
+      {
+        (details) ? (
+          <section className='px-5 h-screen lg:px-0'>
+            <div className='text-center bg-green-100 w-full max-w-[700px] mx-auto rounded-lg shadow-md p-5'>
+              <div className='flex justify-center'>
+                <BsPatchCheckFill style={{ fontSize: '60px',color: 'green' }}/>
+              </div>
+              <h3 className='my-5 text-green-700 text-[22px] font-bold'>
+                Your booking was successfull
+              </h3>
+              <h3 className='my-5 text-green-500 text-[15px] font-bold'>
+                Your slot number is {details ? details.slot : null}
+              </h3>
+              <Link to='/'><h6 className='my-5 text-sm text-blue-500 underline'>Go to home page</h6></Link>
+            </div>
+          </section>
+        ):null
+      }
+    </>
   )
 };
 

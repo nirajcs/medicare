@@ -13,10 +13,11 @@ const AdminHome = () => {
   useEffect(()=>{
     let fetchDetails = async()=>{
       let res = await adminApi.get('/getDashboardDetails')
+      console.log(res.data)
       setDetails(res.data)
     }
     fetchDetails();
-  })
+  },[])
 
   //BAR CHART CONFIGURATION
   const data = {
@@ -24,7 +25,7 @@ const AdminHome = () => {
     datasets: [
       {
         label: "Monthly Bookings",
-        data: [10, 20, 30, 40, 50, 60, 30, 50 , 10, 70, 40, 20],
+        data: details.monthlyCounts,
       },
     ],
   };
