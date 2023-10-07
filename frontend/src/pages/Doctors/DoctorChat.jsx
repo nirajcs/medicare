@@ -79,7 +79,7 @@ const DoctorChat = () => {
   return (
     <section className="container h-screen flex-col h-5/6">
         <div className='flex h-4/5 w-full bg-blue-200 border-r-2 rounded-lg'>
-            <div className='w-1/3 p-5 overflow-y-auto'>
+            <div className='w-1/2 p-5 overflow-y-auto'>
                 {
                     rooms.length > 0 ?(
                         rooms.map((chat,index)=>(
@@ -94,7 +94,7 @@ const DoctorChat = () => {
                     )
                 }
             </div>
-            <div className='w-2/3 h-full border-l-2 p-3'>
+            <div className='w-1/2 h-full border-l-2 p-3'>
                 {
                     chatId ? (  
                         <div className='h-full'>
@@ -127,7 +127,7 @@ const DoctorChat = () => {
                                     <input value={content} onChange={(e)=>setContent(e.target.value)} className='h-full w-full p-3' type="text" />
                                 </div>
                                 <div className='w-1/12'>
-                                    <button type="button" onClick={sendHandler} className="h-full w-full text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-800">Send</button>
+                                    <button type="button" onClick={sendHandler} className="h-full w-full text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-800">Send</button>
                                 </div>
                             </div>
                         </div>                      

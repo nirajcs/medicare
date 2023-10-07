@@ -31,6 +31,7 @@ const MyAppointments = () => {
   useEffect(() => {
     let fetchDetails = async () => {
       let res = await doctorApi.get(`/booking-details/${doctorInfo._id}`);
+      console.log(res.data)
       setBookings(res.data);
     };
     fetchDetails();
@@ -132,7 +133,7 @@ const MyAppointments = () => {
                                   {booking.email ? booking.email : "N/A"}
                                 </td>
                                 <td className='whitespace-nowrap px-5 border-2 border-blue-300 py-4'>
-                                  {booking.name ? booking.position+1 : "N/A"}
+                                  {booking.name ? booking.slotNumber+1 : "N/A"}
                                 </td>
                               </tr>
                             ))

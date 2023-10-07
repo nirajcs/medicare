@@ -30,12 +30,26 @@ const adminController = {
         
         const allUsers = await User.find({});
         const totalBookings = allUsers.reduce((total, user) => total + user.bookings.length, 0);
+
+        // Create an array to store monthly booking counts (initialize with zeros)
+        const monthlyCounts = Array(12).fill(0);
+
+        allUsers.forEach((user) => {
+          user.bookings.forEach((booking) => {
+            const createdAt = new Date(booking.createdAt);
+            const month = createdAt.getMonth(); // Months are zero-based
+    
+            // Increment the count for the month
+            monthlyCounts[month]++;
+          });
+        });
         
         return res.json({
           totalUsers,
           totalDoctors,
           totalApprovedDoctors,
           totalBookings,
+          monthlyCounts
         });
       } catch (error) {
         return res.status(500).json({ error: 'Internal server error' });
