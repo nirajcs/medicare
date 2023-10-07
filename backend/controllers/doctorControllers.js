@@ -116,7 +116,7 @@ const doctorController = {
           }
       
           // Create an array to store all booking details
-          const bookingDetails = [];
+          const bookingDetails = []; 
       
           // Iterate through the doctor's bookings
           for (const booking of doctor.bookings) {
