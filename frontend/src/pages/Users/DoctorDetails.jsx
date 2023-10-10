@@ -123,7 +123,7 @@ const DoctorDetails = () => {
               className="h-full w-full object-cover rounded-lg"
               src={
                 details.imagePath
-                  ? `http://localhost:5000/images/doctors/${details.imagePath}`
+                  ? `https://www.medicarez.online/images/doctors/${details.imagePath}`
                   : null
               }
               alt=""

@@ -93,7 +93,7 @@ const AdminDoctors = () => {
                         {doctor.experience}
                       </td>
                       <td className="px-6 py-4">
-                        <a className='flex justify-center hover:text-blue-700 hover:font-medium' target='_blank' href={`http://localhost:5000/resumes/${doctor.resume}`}>view</a>
+                        <a className='flex justify-center hover:text-blue-700 hover:font-medium' target='_blank' href={`https://www.medicarez.online/resumes/${doctor.resume}`}>view</a>
                       </td>
                       {
                         (!doctor.approved)?(
