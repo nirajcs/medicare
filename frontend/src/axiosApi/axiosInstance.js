@@ -3,15 +3,15 @@ import Cookies from 'js-cookie';
 
 // Create Axios instances
 export const usersApi = axios.create({
-  baseURL: 'http://localhost:5000/api/',
+  baseURL: 'https://www.medicarez.online/api/',
 });
 
 export const adminApi = axios.create({
-  baseURL: 'http://localhost:5000/api/admin',
+  baseURL: 'https://www.medicarez.online/api/admin',
 });
 
 export const doctorApi = axios.create({
-  baseURL: 'http://localhost:5000/api/doctors',
+  baseURL: 'https://www.medicarez.online/api/doctors',
 });
 
 // Define a function to handle token expiration and redirection

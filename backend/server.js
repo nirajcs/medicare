@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ["https://medicarez.online","https://www.medicarez.online"],
     credentials: true
   }));
 
@@ -58,7 +58,7 @@ import { Server } from 'socket.io'
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["https://medicarez.online","https://www.medicarez.online"],
   },
 }); 
 
