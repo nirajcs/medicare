@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 
 import io from 'socket.io-client'
 
-const ENDPOINT = 'http://medicarez.online';
+const ENDPOINT = 'https://medicarez.online';
 var socket,selectedChatCompare;
 
 const DoctorChat = () => {
@@ -52,7 +52,9 @@ const DoctorChat = () => {
                 socket.emit("join chat",chatId)
             }
         };
-        fetchMessages();
+        if(chatId){
+            fetchMessages();
+        }
         selectedChatCompare = chats;
     }, [chatId,messageSent]);
 
