@@ -51,7 +51,7 @@ const Login = () => {
       <section className='px-5 mb-[98px] lg:px-0'>
         <div className='text-center md:text-left w-full max-w-[700px] mx-auto rounded-lg shadow-md p-5'>
           <h3 className='text-headingColor text-[22px] leading-9 font-bold'>
-            Hello User! <span className='text-primaryColor'>Login</span> Here
+            Hello User ! <span className='text-primaryColor'>Login</span> Here
           </h3>
         </div>
   
