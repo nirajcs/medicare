@@ -16,21 +16,21 @@ const EmailVerify = () => {
 
     const [verify,{ isLoading }] = useVerifyMutation()
   
-  const submitHandler = async(e)=>{
-    e.preventDefault();
-    try {
-        const res = await verify({email,otp})
-        console.log(res)
-        if(res.data.error){
-            toast.error(res.data.error)
-        }else{
-            dispatch(setCredentials({...res}));
-            navigate('/home');
-        }
-    } catch (err) {
-        toast.error(err?.data?.message || err.error);
+    const submitHandler = async(e)=>{
+      e.preventDefault();
+      try {
+          const res = await verify({email,otp}).unwrap();
+          console.log(res)
+          if(res.error){
+            toast.error(res.error)
+            return
+          }
+          dispatch(setCredentials({...res}));
+          navigate('/home');
+      } catch (err) {
+          toast.error(err?.data?.message || err.error);
+      }
     }
-  }
 
   return (
     <section className='px-5 lg:px-0'>
