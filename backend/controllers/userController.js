@@ -132,7 +132,12 @@ const userController = {
         });
 
         await sendOtpLink(user.email,user.otp)
-        res.status(201).json({email:user.email})
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            blocked:user.blocked
+        })
     }),
 
     otpVerify : asyncHandler(async(req,res)=>{
