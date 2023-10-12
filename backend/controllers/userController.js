@@ -160,6 +160,55 @@ const userController = {
         }
     }),
 
+    forgotEmailCheck : asyncHandler(async(req,res)=>{
+        const { email } = req.body
+        const userExists = await User.findOne({email:email})
+        if(userExists && !userExists.blocked){
+            let newotp= Math.floor(100000 + Math.random() * 900000);
+            userExists.otp = newotp
+            await userExists.save()
+            sendOtpLink(userExists.email,newotp)
+            res.status(200).json({
+                _id:userExists._id,
+                name:userExists.name,
+                email:userExists.email
+            })
+        }else{
+            res.status(400).json({error:"User not found or blocked by admin"});
+        }
+    }),
+
+    forgotOtpVerify : asyncHandler(async(req,res)=>{
+        const { email,otp } = req.body
+        const userExists = await User.findOne({email:email})
+        if(userExists.otp === Number(otp)){
+            res.status(200).json({
+                _id:userExists._id,
+                name:userExists.name,
+                email:userExists.email,
+                otp:userExists.otp
+            })
+        }else{
+            res.status(400).json({error:"OTP Incorrect"})
+        }
+    }),
+
+    resetPassword : asyncHandler(async(req,res)=>{
+        const { email,password } = req.body
+        const userExists = await User.findOne({email:email});
+        if(userExists){
+            userExists.password = password;
+            let changePassword = await userExists.save()
+            if(changePassword){
+                res.status(200).json({message:"Password Changed Successfully"})
+            }else{
+                res.status(400).json({error:"Failed to change the password"})
+            }
+        }else{
+            res.status(400).json({error:"User not found"})
+        }
+    }),
+
     getUserDetails : asyncHandler(async(req,res)=>{
         const id = req.params.id
         const user = await User.findById(id,{password:0,otp:0})

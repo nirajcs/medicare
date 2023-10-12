@@ -11,6 +11,12 @@ router.post('/g-login',userController.googleLogin)
 router.post('/auth',userController.authUser);
 router.post('/oauth',userController.oauth)//Google Sign Up
 router.post('/register',userController.registerUser);
+
+//FORGET PASSWORD
+router.post('/forget-email-verify',userController.forgotEmailCheck);
+router.post('/forget-otp-verify',userController.forgotOtpVerify)
+router.post('/reset-password',userController.resetPassword)
+
 router.post('/otpverify',userController.otpVerify)
 router.get('/user-profile/:id',userController.getUserDetails)
 router.post('/update-user',userController.updateUser)
