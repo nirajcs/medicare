@@ -61,19 +61,26 @@ const Login = () => {
           </div>
           <form onSubmit={submitHandler} className="flex-col text-center md:mx-[60px] md:text-center">
             <div className="my-[20px]">
-              <input type="text" name="email" placeholder="Enter your email" value={email} onChange={(e)=>setEmail(e.target.value)} className="w-[200px] text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
+              <input type="text" name="email" placeholder="Enter your email" value={email} onChange={(e)=>setEmail(e.target.value)} className="w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
             </div>
             <div className="my-[20px]">
-              <input type="password" name="password" placeholder="Enter your password" value={password} onChange={(e)=>setPassword(e.target.value)} className="w-[200px] text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
+              <input type="password" name="password" placeholder="Enter your password" value={password} onChange={(e)=>setPassword(e.target.value)} className="w-full text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
             </div>
             <div className='flex items-center justify-center'>
               <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
             </div>
-            <div className="my-[10px] text-[12px] flex items-center justify-center">
-              <p className='text-textGray'>New User?</p>
-              <Link to='/signup'>
-                <p className='text-primaryColor mx-[2px]'>SignUp</p>
-              </Link>
+            <div className="my-[10px] text-[12px] flex items-center justify-between">
+              <div className='flex'>
+                <p className='text-textGray'>New User?</p>
+                <Link to='/signup'>
+                  <p className='text-primaryColor ms-1'>SignUp</p>
+                </Link>
+              </div>
+              <div>
+                <Link to='/forgot'>
+                  <p className='text-primaryColor'> Forgot Password</p>
+                </Link>
+              </div>
             </div>
             <GoogleLogin
               onSuccess={credentialResponse => {

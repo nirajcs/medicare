@@ -2,6 +2,8 @@ import React from 'react'
 import Home from '../pages/Users/Home'
 import Login from '../pages/Users/Login'
 import Signup from '../pages/Users/Signup'
+import ForgotVerify from '../pages/Users/ForgotVerify'
+import ResetPassword from '../pages/Users/ResetPassword'
 import EmailVerify from '../pages/Users/EmailVerify'
 import Profile from '../pages/Users/Profile'
 import DoctorList from '../pages/Users/DoctorList'
@@ -36,6 +38,8 @@ const Routers = () => {
         <Route path='/' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/otp' element={<EmailVerify/>}/>
+        <Route path='/forgot' element={<ForgotVerify/>}/>
+        <Route path='/reset' element={<ResetPassword/>}/>
         <Route path='' element={<PrivateRoute/>}>
           <Route path='/home' element={<Home/>}/>
           <Route path='/profile' element={<Profile/>}/>
