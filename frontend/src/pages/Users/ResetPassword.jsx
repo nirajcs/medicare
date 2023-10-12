@@ -12,22 +12,27 @@ const ResetPassword = () => {
   const email = location.state.email;
   const submitHandler = async(e)=>{
     e.preventDefault()
-    if(!password || !confirmPass){
-      toast.error("Both fields are required")
-      return
-    }
-    if(password != confirmPass){
-      toast.error("Passwords does not match")
-      return
-    }
-    try {
-      let res = await usersApi.post('/reset-password',{email,password})
-      if(res){
-        toast.success(res.data.message)
-        navigate('/')
-      }
-    } catch (error) {
-      
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+    if(passwordRegex.test(password)){
+        if(!password || !confirmPass){
+          toast.error("Both fields are required")
+          return
+        }
+        if(password != confirmPass){
+          toast.error("Passwords does not match")
+          return
+        }
+        try {
+          let res = await usersApi.post('/reset-password',{email,password})
+          if(res){
+            toast.success(res.data.message)
+            navigate('/')
+          }
+        } catch (err) {
+          toast.error(err?.response?.data.error)
+        }
+    }else{
+        toast.error('Password must contain 5 characters with at least one letter, one number, and one special character.')
     }
   }
 

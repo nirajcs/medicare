@@ -44,7 +44,7 @@ const EmailVerify = () => {
         <form onSubmit={submitHandler} className="flex-col text-center md:mx-[60px] md:text-center">
             <input type="hidden" name="email" value={email}/>
           <div className="my-[20px]">
-            <input type="text" value={otp} onChange={(e)=>setOtp(e.target.value)} name="otp" placeholder="Enter your email" className="w-[200px] text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
+            <input type="text" value={otp} onChange={(e)=>setOtp(e.target.value)} name="otp" placeholder="Enter your OTP" className="w-[200px] text-[15px] border-solid border-b-2 focus:text-[16px] focus:border-blue-500 focus:outline-none"/>
           </div>
           <div className='flex items-center justify-center'>
             <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Verify</button>
