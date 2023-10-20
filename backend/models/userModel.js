@@ -25,6 +25,10 @@ const userSchema = mongoose.Schema(
     otp:{
       type:Number
     },
+    verified:{
+      type : Boolean,
+      default : false
+    },
     gender:{
       type:String,
       default:null

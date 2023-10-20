@@ -72,7 +72,7 @@ const userController = {
 
         const user = await User.findOne({ email });
       
-        if (user && (await user.matchPassword(password)) && !user.blocked) {
+        if (user && (await user.matchPassword(password)) && !user.blocked && user.verified) {
           generateToken(res, user._id);
       
           res.json({
@@ -113,41 +113,55 @@ const userController = {
         }
     }),
 
-    registerUser : asyncHandler(async(req,res)=>{
+    registerUser : asyncHandler(async (req, res) => {
         const { name, email, password } = req.body;
-
-        const userExists = await User.findOne({ email });
-
-        if (userExists) {
-            res.status(400);
-            throw new Error('User already exists');
+    
+        try {
+            // Check if a user with the same email exists.
+            let userExists = await User.findOne({ email });
+    
+            if (userExists && userExists.verified) {
+                res.status(400).json({ message: 'User already exists' });
+            } else {
+                let newotp = Math.floor(100000 + Math.random() * 900000);
+    
+                if (userExists) {
+                    userExists.name = name;
+                    userExists.otp = newotp;
+                    userExists.password = password;
+                    userExists = await userExists.save();
+                } else {
+                    userExists = await User.create({
+                        name,
+                        email,
+                        password,
+                        otp: newotp,
+                    });
+                }
+    
+                await sendOtpLink(userExists.email, userExists.otp);
+                res.status(201).json({
+                    _id: userExists._id,
+                    name: userExists.name,
+                    email: userExists.email,
+                    blocked: userExists.blocked,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Registration failed', error: error.message });
         }
-
-        let newotp= Math.floor(100000 + Math.random() * 900000);
-        const user = await User.create({
-            name,
-            email,
-            password,
-            otp:newotp
-        });
-
-        await sendOtpLink(user.email,user.otp)
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            blocked:user.blocked
-        })
     }),
 
     otpVerify : asyncHandler(async(req,res)=>{
         const { email,otp } = req.body
 
-        const userExists = await User.findOne({email})
+        let userExists = await User.findOne({email})
 
         if(userExists){
             if (userExists.otp == Number(otp)) {
                 generateToken(res, userExists._id);
+                userExists.verified = true
+                userExists = await userExists.save()
                 res.status(201).json({
                 _id: userExists._id,
                 name: userExists.name,
